@@ -18,6 +18,11 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult Process(Movie model)
+    {
+        return new ContentResult{Content = $"hello there {model.File.FileName}"};
+    }
+
     public IActionResult Privacy()
     {
         return View();
