@@ -4,11 +4,13 @@ public class QueuedHostedService : BackgroundService
 {
     private readonly IBackgroundTaskQueue _taskQueue;
     private readonly ILogger<QueuedHostedService> _logger;
+    private readonly IServiceScopeFactory _scopeFactory;
 
-    public QueuedHostedService(IBackgroundTaskQueue taskQueue, ILogger<QueuedHostedService> logger)
+    public QueuedHostedService(IBackgroundTaskQueue taskQueue, ILogger<QueuedHostedService> logger, IServiceScopeFactory scopeFactory)
     {
         _taskQueue = taskQueue;
         _logger = logger;
+        _scopeFactory = scopeFactory;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -23,18 +25,22 @@ public class QueuedHostedService : BackgroundService
 
     public async Task BackgroundProcessing(CancellationToken stoppingToken)
     {
+        // Dequeue and execute tasks until the application is stopped
         while (!stoppingToken.IsCancellationRequested)
         {
-            var workItem = await _taskQueue.DequeueAsync(stoppingToken);
+            // Get next task
+            // This blocks until a task becomes available
+            var task = await _taskQueue.DequeueAsync(stoppingToken);
 
             try
             {
-                await workItem(stoppingToken);
+                // Execute task
+                await task(_scopeFactory, stoppingToken);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex,
-                    "Error occurred executing {WorkItem}.", nameof(workItem));
+                    "Error occurred executing {WorkItem}.", nameof(task));
             }
         }
     }
