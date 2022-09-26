@@ -2,15 +2,15 @@ namespace MovieCastIdentifier.Helpers;
 
 public static class StreamToByteArrayExtension
     {
-        public static byte[] ToByteArray(this Stream stream)
+        public async static Task<byte[]> MyByteArrayAsync(this MyHugeMemoryStream memoryStream)
         {
-            using (stream)
+            using (memoryStream)
             {
-                using (MemoryStream memStream = new MemoryStream())
-                {
-                     stream.CopyTo(memStream);
-                     return memStream.ToArray();
-                }
+                memoryStream.Position = (memoryStream.Length / 4) * 3;
+                byte[] byteArray = new byte[memoryStream.Length - memoryStream.Position];
+                await memoryStream.ReadAsync(byteArray, 0, byteArray.Length);
+                memoryStream.Position = 0;
+                return byteArray;
             }
         }
     }

@@ -171,10 +171,7 @@ namespace MovieCastIdentifier.Helpers
                     }
                     else
                     {
-                        memoryStream.Position = (memoryStream.Length / 4) * 3;
-                        byte[] byteArray = new byte[memoryStream.Length - memoryStream.Position];
-                        await memoryStream.ReadAsync(byteArray, 0, byteArray.Length);
-                        memoryStream.Position = 0;
+                        var byteArray = await memoryStream.MyByteArrayAsync();
                         return memoryStream;
                     }
                 }
