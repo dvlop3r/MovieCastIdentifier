@@ -4,10 +4,12 @@ using System.Text;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
 using MovieCastIdentifier.Filters;
 using MovieCastIdentifier.Helpers;
+using MovieCastIdentifier.SignalRHubs;
 
 namespace MovieCastIdentifier.Controllers
 {
@@ -17,19 +19,22 @@ namespace MovieCastIdentifier.Controllers
         private readonly ILogger<StreamingController> _logger;
         private readonly string[] _permittedExtensions = { ".txt", ".mp4", ".mkv" };
         private readonly string _targetFilePath;
+        private readonly IHubContext<FileStreamHub, FileStreamClient> _hubContext;
 
         // Get the default form options so that we can use them to set the default 
         // limits for request body data.
         private static readonly FormOptions _defaultFormOptions = new FormOptions();
 
-        public StreamingController(ILogger<StreamingController> logger, 
-            IConfiguration config)
+        public StreamingController(ILogger<StreamingController> logger,
+            IConfiguration config,
+            IHubContext<FileStreamHub, FileStreamClient> hubContext)
         {
             _logger = logger;
             _fileSizeLimit = config.GetValue<long>("FileSizeLimit");
 
             // To save physical files to a path provided by configuration:
             _targetFilePath = config.GetValue<string>("StoredFilesPath");
+            _hubContext = hubContext;
 
             // To save physical files to the temporary files folder, use:
             //_targetFilePath = Path.GetTempPath();
@@ -92,6 +97,9 @@ namespace MovieCastIdentifier.Controllers
                         trustedFileNameForDisplay = WebUtility.HtmlEncode(
                                 contentDisposition.FileName.Value);
 
+                        // Notify the client that the upload is starting
+                        string message = "Thank you for your request. Please wait while we upload and process your file.";
+                        await _hubContext.Clients.All.ReceiveMessage("", message);
                         streamedFileContent = 
                             await FileHelpers.ProcessStreamedFile(section, contentDisposition, 
                                 ModelState, _permittedExtensions, _fileSizeLimit);
@@ -112,6 +120,10 @@ namespace MovieCastIdentifier.Controllers
                                 trustedFileNameForDisplay, _targetFilePath, 
                                 trustedFileNameForFileStorage);
                         }
+
+                        // Notify the client that the file was uploaded successfully
+                        await _hubContext.Clients.All.ReceiveMessage("", 
+                            $"File {trustedFileNameForDisplay} uploaded successfully.");
                     }
                     else if (MultipartRequestHelper
                         .HasFormDataContentDisposition(contentDisposition))

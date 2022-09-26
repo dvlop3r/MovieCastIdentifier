@@ -6,14 +6,14 @@
 document.addEventListener("DOMContentLoaded", () => {
     // <snippet_Connection>
     const connection = new signalR.HubConnectionBuilder()
-        .withUrl("/chathub")
+        .withUrl("/fileStreamHub")
         .withAutomaticReconnect()
         .build();
     // </snippet_Connection>
 
     // <snippet_ReceiveMessage>
     connection.on("ReceiveMessage", (user, message) => {
-        $("#message").val(message);
+        $("#message").text(message);
     });
     // </snippet_ReceiveMessage>
 

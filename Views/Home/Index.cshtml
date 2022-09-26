@@ -32,6 +32,8 @@
         <output form="uploadForm" name="result"></output>
     </div>
 </form>
+
+<br>
 <h4 id="message"></h4>
 
 @section Scripts {
@@ -39,7 +41,6 @@
     "use strict";
 
     async function AJAXSubmit (oFormElement) {
-        $("#message").text("Thank you for your request. Please wait while we upload and process your file.");
         const formData = new FormData(oFormElement);
         console.log(oFormElement.action);
       try {
