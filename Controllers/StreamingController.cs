@@ -100,6 +100,7 @@ namespace MovieCastIdentifier.Controllers
                         // Notify the client that the upload is starting
                         string message = "Thank you for your request. Please wait while we upload and process your file.";
                         await _hubContext.Clients.All.ReceiveMessage("", message);
+                        
                         streamedFileContent = 
                             await FileHelpers.ProcessStreamedFile(section, contentDisposition, 
                                 ModelState, _permittedExtensions, _fileSizeLimit);

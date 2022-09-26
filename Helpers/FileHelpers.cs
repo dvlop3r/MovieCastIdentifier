@@ -177,9 +177,8 @@ namespace MovieCastIdentifier.Helpers
             }
             catch (Exception ex)
             {
-                modelState.AddModelError("File",
-                    "The upload failed. Please contact the Help Desk " +
-                    $" for support. Error: {ex.HResult}");
+                modelState.AddModelError("Stream to memory",
+                    $"The upload failed: {ex.Message}");
                 // Log the exception
             }
 

@@ -53,7 +53,7 @@
         });
 
         oFormElement.elements.namedItem("result").value = 
-          'Result: ' + response.status + ' ' + response.statusText;
+          'Response: ' + response.status + "     "+ await response.text();
 
       } catch (error) {
         console.error('Error:', error);
