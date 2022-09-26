@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using MovieCastIdentifier.Atributes;
+using MovieCastIdentifier.Filters;
 using MovieCastIdentifier.Models;
 
 namespace MovieCastIdentifier.Controllers;
