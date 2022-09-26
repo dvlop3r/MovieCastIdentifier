@@ -86,6 +86,7 @@ namespace MovieCastIdentifier.Controllers
                         .HasFileContentDisposition(contentDisposition))
                     {
                         untrustedFileNameForStorage = contentDisposition.FileName.Value;
+                        var trustedFileNameForFileStorage = Path.GetRandomFileName();
                         // Don't trust the file name sent by the client. To display
                         // the file name, HTML-encode the value.
                         trustedFileNameForDisplay = WebUtility.HtmlEncode(
@@ -98,6 +99,18 @@ namespace MovieCastIdentifier.Controllers
                         if (!ModelState.IsValid)
                         {
                             return BadRequest(ModelState);
+                        }
+
+                        var filePath = Path.Combine(_targetFilePath, untrustedFileNameForStorage);
+                        using (var targetStream = System.IO.File.Create(filePath))
+                        {
+                            await targetStream.WriteAsync(streamedFileContent);
+
+                            _logger.LogInformation(
+                                "Uploaded file '{untrustedFileNameForStorage}' saved to " +
+                                "'{TargetFilePath}' as {untrustedFileNameForStorage}", 
+                                trustedFileNameForDisplay, _targetFilePath, 
+                                trustedFileNameForFileStorage);
                         }
                     }
                     else if (MultipartRequestHelper
