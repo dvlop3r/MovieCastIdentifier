@@ -107,6 +107,7 @@ namespace MovieCastIdentifier.Controllers
 
                         if (!ModelState.IsValid)
                         {
+                            await _hubContext.Clients.All.ReceiveMessage("", "");
                             return BadRequest(ModelState);
                         }
 

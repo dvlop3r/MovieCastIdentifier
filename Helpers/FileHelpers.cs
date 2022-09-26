@@ -199,6 +199,9 @@ namespace MovieCastIdentifier.Helpers
                 return false;
             }
 
+            // Ignore the rest
+            return true;
+
             data.Position = 0;
 
             using (var reader = new BinaryReader(data))
@@ -241,10 +244,10 @@ namespace MovieCastIdentifier.Helpers
                 // to allow on the system and perform the file signature
                 // check.
                 
-                if (!_fileSignature.ContainsKey(ext))
-                {
-                    return true;
-                }
+                // if (!_fileSignature.ContainsKey(ext))
+                // {
+                //     return true;
+                // }
                 
 
                 // File signature check
