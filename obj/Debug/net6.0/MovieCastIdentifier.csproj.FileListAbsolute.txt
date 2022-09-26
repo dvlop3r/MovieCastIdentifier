@@ -24,3 +24,17 @@ C:\Users\sarwa\dotnet\MovieCastIdentifier\obj\Debug\net6.0\refint\MovieCastIdent
 C:\Users\sarwa\dotnet\MovieCastIdentifier\obj\Debug\net6.0\MovieCastIdentifier.pdb
 C:\Users\sarwa\dotnet\MovieCastIdentifier\obj\Debug\net6.0\MovieCastIdentifier.genruntimeconfig.cache
 C:\Users\sarwa\dotnet\MovieCastIdentifier\obj\Debug\net6.0\ref\MovieCastIdentifier.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\app.config
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\MovieCastIdentifier.dll.config
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\System.Drawing.Common.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\System.Security.Permissions.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\System.Windows.Extensions.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\obj\Debug\net6.0\MovieCastIdentifier.csproj.CopyComplete

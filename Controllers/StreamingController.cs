@@ -112,9 +112,9 @@ namespace MovieCastIdentifier.Controllers
                         }
 
                         var filePath = Path.Combine(_targetFilePath, untrustedFileNameForStorage);
-                        using (var targetStream = System.IO.File.Create(filePath))
+                        using (var targetStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                         {
-                            await targetStream.WriteAsync(streamedFileContent);
+                            await section.Body.CopyToAsync(targetStream);
 
                             _logger.LogInformation(
                                 "Uploaded file '{untrustedFileNameForStorage}' saved to " +
