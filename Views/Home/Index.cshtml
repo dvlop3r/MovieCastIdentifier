@@ -10,23 +10,25 @@
     enctype="multipart/form-data" onsubmit="AJAXSubmit(this);return false;">
     <dl>
         <dt>
-            <label for="title">File title</label>
+            <label for="title" class="col-2 col-form-label">File title</label>
         </dt>
         <dd>
-            <input id="title" type="text" name="title"  />
+            <div class="col col-sm-6">
+                <input id="title" name="title" class="form-control" />
+            </div>
         </dd>
         <dt>
-            <label for="file">File</label>
+            <label for="file" class="col-2 col-form-label">File</label>
         </dt>
         <dd>
             <input id="file" type="file" name="file" />
         </dd>
     </dl>
 
-    <input class="btn" type="submit" value="Upload" class="btn btn-primary" />
+    <button type="submit" value="Upload" class="btn btn-primary">Upload</button>
 
     <div style="margin-top:15px">
-        <output form="uploadForm" name="result"></output>
+        <h4 form="uploadForm" name="result"></h4>
     </div>
 </form>
 
