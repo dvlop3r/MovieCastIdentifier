@@ -1,6 +1,6 @@
 namespace MovieCastIdentifier.Helpers;
 
-class MyHugeMemoryStream : Stream
+public class MyHugeMemoryStream : Stream
     {
         #region Fields
 

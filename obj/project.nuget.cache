@@ -1,16 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "vm7gBJxqNuYsNCCYjSOfGE1n0F97ncTL0Rzl+c0obAy+m+XIHG7qugWRQRaSS++8HY/MsQt/JtczpEt8lgvV/Q==",
+  "dgSpecHash": "qOsiM82gbKr/n8o7isf/uRqkHqvphg2i7EzI2OL7/HYeh22LL9iN7fkYdsZkKgRj250pih3pIQBu3p8yoUIz0A==",
   "success": true,
   "projectFilePath": "C:\\Users\\sarwa\\dotnet\\MovieCastIdentifier\\MovieCastIdentifier.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\sarwa\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
-    "C:\\Users\\sarwa\\.nuget\\packages\\system.configuration.configurationmanager\\6.0.1\\system.configuration.configurationmanager.6.0.1.nupkg.sha512",
-    "C:\\Users\\sarwa\\.nuget\\packages\\system.drawing.common\\6.0.0\\system.drawing.common.6.0.0.nupkg.sha512",
-    "C:\\Users\\sarwa\\.nuget\\packages\\system.security.accesscontrol\\6.0.0\\system.security.accesscontrol.6.0.0.nupkg.sha512",
-    "C:\\Users\\sarwa\\.nuget\\packages\\system.security.cryptography.protecteddata\\6.0.0\\system.security.cryptography.protecteddata.6.0.0.nupkg.sha512",
-    "C:\\Users\\sarwa\\.nuget\\packages\\system.security.permissions\\6.0.0\\system.security.permissions.6.0.0.nupkg.sha512",
-    "C:\\Users\\sarwa\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512"
-  ],
+  "expectedPackageFiles": [],
   "logs": []
 }

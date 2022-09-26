@@ -70,7 +70,7 @@ namespace MovieCastIdentifier.Controllers
             var formAccumulator = new KeyValueAccumulator();
             var trustedFileNameForDisplay = string.Empty;
             var untrustedFileNameForStorage = string.Empty;
-            var streamedFileContent = Array.Empty<byte>();
+            var streamedFileContent = new MyHugeMemoryStream();
 
             var boundary = MultipartRequestHelper.GetBoundary(
                 MediaTypeHeaderValue.Parse(Request.ContentType),
@@ -112,15 +112,18 @@ namespace MovieCastIdentifier.Controllers
                         }
 
                         var filePath = Path.Combine(_targetFilePath, untrustedFileNameForStorage);
-                        using (var targetStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                        {
-                            await section.Body.CopyToAsync(targetStream);
+                        try{
+                            using (var targetStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                            {
+                                await section.Body.CopyToAsync(targetStream);
 
-                            _logger.LogInformation(
-                                "Uploaded file '{untrustedFileNameForStorage}' saved to " +
-                                "'{TargetFilePath}' as {untrustedFileNameForStorage}", 
-                                trustedFileNameForDisplay, _targetFilePath, 
-                                trustedFileNameForFileStorage);
+                                _logger.LogInformation(
+                                    $"Uploaded file '{untrustedFileNameForStorage}' saved to " +
+                                    $"'{filePath}' with length {streamedFileContent.Length}.");
+                            }
+                        }
+                        catch(Exception e){
+
                         }
 
                         // Notify the client that the file was uploaded successfully
