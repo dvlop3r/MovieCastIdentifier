@@ -146,33 +146,32 @@ namespace MovieCastIdentifier.Helpers
         {
             try
             {
-                var filepath = Path.Combine("c:\\files", contentDisposition.FileName.ToString().Trim('"'));
-                using (var stream = new FileStream(filepath, FileMode.Create, FileAccess.Write))
+                using (var memoryStream = new MemoryStream())
                 {
-                    await section.Body.CopyToAsync(stream);
+                    await section.Body.CopyToAsync(memoryStream);
 
                     // Check if the file is empty or exceeds the size limit.
-                    if (stream.Length == 0)
+                    if (memoryStream.Length == 0)
                     {
                         modelState.AddModelError("File", "The file is empty.");
                     }
-                    else if (stream.Length > sizeLimit)
+                    else if (memoryStream.Length > sizeLimit)
                     {
                         var megabyteSizeLimit = sizeLimit / 1048576;
                         modelState.AddModelError("File",
                         $"The file exceeds {megabyteSizeLimit:N1} MB.");
                     }
-                    // else if (!IsValidFileExtensionAndSignature(
-                    //     contentDisposition.FileName.Value, stream, 
-                    //     permittedExtensions))
-                    // {
-                    //     modelState.AddModelError("File",
-                    //         "The file type isn't permitted or the file's " +
-                    //         "signature doesn't match the file's extension.");
-                    // }
+                    else if (!IsValidFileExtensionAndSignature(
+                        contentDisposition.FileName.Value, memoryStream, 
+                        permittedExtensions))
+                    {
+                        modelState.AddModelError("File",
+                            "The file type isn't permitted or the file's " +
+                            "signature doesn't match the file's extension.");
+                    }
                     else
                     {
-                        return Array.Empty<byte>();
+                        return memoryStream.ToArray();
                     }
                 }
             }
@@ -242,12 +241,12 @@ namespace MovieCastIdentifier.Helpers
                 // for files (when possible) for all file types you intend
                 // to allow on the system and perform the file signature
                 // check.
-                /*
+                
                 if (!_fileSignature.ContainsKey(ext))
                 {
                     return true;
                 }
-                */
+                
 
                 // File signature check
                 // --------------------

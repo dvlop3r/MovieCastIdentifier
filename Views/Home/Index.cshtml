@@ -5,6 +5,7 @@
 }
 
 <h1>Stream a file with AJAX to a controller endpoint</h1>
+@Html.ValidationSummary()
 
 <form id="uploadForm" action="Streaming/StreamFile" method="post" 
     enctype="multipart/form-data" onsubmit="AJAXSubmit(this);return false;">
@@ -28,7 +29,7 @@
     <button type="submit" value="Upload" class="btn btn-primary">Upload</button>
 
     <div style="margin-top:15px">
-        <h4 form="uploadForm" name="result"></h4>
+        <output form="uploadForm" name="result"></output>
     </div>
 </form>
 
