@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using MovieCastIdentifier.Filters;
 using MovieCastIdentifier.Models;
 
 namespace MovieCastIdentifier.Controllers;
@@ -13,6 +14,9 @@ public class HomeController : Controller
         _logger = logger;
     }
 
+
+    [HttpGet]
+    [GenerateAntiforgeryTokenCookie]
     public IActionResult Index()
     {
         return View();

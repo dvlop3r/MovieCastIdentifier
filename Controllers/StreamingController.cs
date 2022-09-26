@@ -15,7 +15,7 @@ namespace MovieCastIdentifier.Controllers
     {
         private readonly long _fileSizeLimit;
         private readonly ILogger<StreamingController> _logger;
-        private readonly string[] _permittedExtensions = { ".txt" };
+        private readonly string[] _permittedExtensions = { ".txt", ".mp4", ".mkv" };
         private readonly string _targetFilePath;
 
         // Get the default form options so that we can use them to set the default 
