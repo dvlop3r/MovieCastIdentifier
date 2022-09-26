@@ -1,20 +1,68 @@
-﻿@model Movie
+﻿
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Streamed Single File Upload with AJAX";
+    var message = ViewBag.Message ?? "";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1>Stream a file with AJAX to a controller endpoint</h1>
 
-@using (Html.BeginForm("process", "home", FormMethod.Post, new {enctype = "multipart/form-data"}))
-{
-    <tr>
-        <th>Upload movie</th>
-        <td>
-            @Html.EditorFor(model => model.File)
-        </td>
-    </tr>
-    <button>Upload</button>
+<form id="uploadForm" action="Streaming/StreamFile" method="post" 
+    enctype="multipart/form-data" onsubmit="AJAXSubmit(this);return false;">
+    <dl>
+        <dt>
+            <label for="title">File title</label>
+        </dt>
+        <dd>
+            <input id="title" type="text" name="title"  />
+        </dd>
+        <dt>
+            <label for="file">File</label>
+        </dt>
+        <dd>
+            <input id="file" type="file" name="file" />
+        </dd>
+    </dl>
+
+    <input class="btn" type="submit" value="Upload" />
+
+    <div style="margin-top:15px">
+        <output form="uploadForm" name="result"></output>
+    </div>
+</form>
+
+<a id="send" href="/home/get?name=Sarwan Surchi" onclick="return sendMessage(this);" class="btn btn-primary">Send message</a>
+<hr>
+
+<h4 id="message">@message</h4>
+
+@section Scripts {
+  <script>
+    "use strict";
+
+    async function AJAXSubmit (oFormElement) {
+      const formData = new FormData(oFormElement);
+    console.log(oFormElement.action);
+      try {
+        const response = await fetch(oFormElement.action, {
+          method: 'POST',
+          headers: {
+            'RequestVerificationToken': getCookie('RequestVerificationToken')
+          },
+          body: formData
+        });
+
+        oFormElement.elements.namedItem("result").value = 
+          'Result: ' + response.status + ' ' + response.statusText;
+
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    function getCookie (name) {
+      var value = "; " + document.cookie;
+      var parts = value.split("; " + name + "=");
+      if (parts.length == 2) return parts.pop().split(";").shift();
+    }
+  </script>
 }
