@@ -205,5 +205,28 @@ class MyHugeMemoryStream : Stream
             }
         }
 
+        // GetBuffer()
+        public byte[] GetBuffer()
+        {
+            if (_length > int.MaxValue)
+                throw new InvalidOperationException("GetBuffer > int.MaxValue");
+
+            byte[] buffer = new byte[(int)_length];
+
+            Read(buffer, 0, buffer.Length);
+
+            return buffer;
+        }
+
+        // // Override ToArray
+        public byte[] ToArray()
+        {
+            byte[] buffer = new byte[_length];
+
+            Read(buffer, 0, (int)_length);
+
+            return buffer;
+        }
+
         #endregion Stream
     }

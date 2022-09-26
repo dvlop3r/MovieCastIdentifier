@@ -146,7 +146,7 @@ namespace MovieCastIdentifier.Helpers
         {
             try
             {
-                using (var memoryStream = new MemoryStream())
+                using (var memoryStream = new MyHugeMemoryStream())
                 {
                     await section.Body.CopyToAsync(memoryStream);
 
@@ -171,7 +171,8 @@ namespace MovieCastIdentifier.Helpers
                     }
                     else
                     {
-                        return memoryStream.ToArray();
+                        // section.Body.ToByteArray();
+                        Array bytes = memoryStream.GetBuffer();
                     }
                 }
             }
