@@ -115,7 +115,7 @@ namespace MovieCastIdentifier.Controllers
                         try{
                             using (var targetStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                             {
-                                await section.Body.CopyToAsync(targetStream);
+                                await streamedFileContent.CopyToAsync(targetStream);
 
                                 _logger.LogInformation(
                                     $"Uploaded file '{untrustedFileNameForStorage}' saved to " +
