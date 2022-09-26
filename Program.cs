@@ -1,11 +1,15 @@
 using MovieCastIdentifier.Services;
+using MovieCastIdentifier.SignalRHubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
 builder.Services.AddHostedService<QueuedHostedService>();
+
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -23,6 +27,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapHub<FileStreamHub>("/fileStreamHub");
 
 app.MapControllerRoute(
     name: "default",
