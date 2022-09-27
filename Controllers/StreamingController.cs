@@ -70,7 +70,7 @@ namespace MovieCastIdentifier.Controllers
             var formAccumulator = new KeyValueAccumulator();
             var trustedFileNameForDisplay = string.Empty;
             var untrustedFileNameForStorage = string.Empty;
-            var streamedFileContent = new MyHugeMemoryStream();
+            var streamedFileContent = Array.Empty<byte>();
 
             var boundary = MultipartRequestHelper.GetBoundary(
                 MediaTypeHeaderValue.Parse(Request.ContentType),
@@ -115,7 +115,7 @@ namespace MovieCastIdentifier.Controllers
                         try{
                             using (var targetStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                             {
-                                await streamedFileContent.CopyToAsync(targetStream);
+                                await targetStream.WriteAsync(streamedFileContent);
 
                                 _logger.LogInformation(
                                     $"Uploaded file '{untrustedFileNameForStorage}' saved to " +
