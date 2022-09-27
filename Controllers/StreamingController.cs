@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
 using MovieCastIdentifier.Filters;
 using MovieCastIdentifier.Helpers;
+using MovieCastIdentifier.Services;
 using MovieCastIdentifier.SignalRHubs;
 
 namespace MovieCastIdentifier.Controllers
@@ -20,6 +21,8 @@ namespace MovieCastIdentifier.Controllers
         private readonly string[] _permittedExtensions = { ".txt", ".mp4", ".mkv" };
         private readonly string _targetFilePath;
         private readonly IHubContext<FileStreamHub, FileStreamClient> _hubContext;
+        private readonly IBackgroundTaskQueue _backgroundTaskQueue;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
         // Get the default form options so that we can use them to set the default 
         // limits for request body data.
@@ -27,7 +30,9 @@ namespace MovieCastIdentifier.Controllers
 
         public StreamingController(ILogger<StreamingController> logger,
             IConfiguration config,
-            IHubContext<FileStreamHub, FileStreamClient> hubContext)
+            IHubContext<FileStreamHub, FileStreamClient> hubContext,
+            IBackgroundTaskQueue backgroundTaskQueue,
+            IServiceScopeFactory serviceScopeFactory)
         {
             _logger = logger;
             _fileSizeLimit = config.GetValue<long>("FileSizeLimit");
@@ -35,6 +40,8 @@ namespace MovieCastIdentifier.Controllers
             // To save physical files to a path provided by configuration:
             _targetFilePath = config.GetValue<string>("StoredFilesPath");
             _hubContext = hubContext;
+            _backgroundTaskQueue = backgroundTaskQueue;
+            _serviceScopeFactory = serviceScopeFactory;
 
             // To save physical files to the temporary files folder, use:
             //_targetFilePath = Path.GetTempPath();
@@ -70,7 +77,7 @@ namespace MovieCastIdentifier.Controllers
             var formAccumulator = new KeyValueAccumulator();
             var trustedFileNameForDisplay = string.Empty;
             var untrustedFileNameForStorage = string.Empty;
-            var streamedFileContent = Array.Empty<byte>();
+            var streamedFileContent = new MyHugeMemoryStream();
 
             var boundary = MultipartRequestHelper.GetBoundary(
                 MediaTypeHeaderValue.Parse(Request.ContentType),
@@ -101,9 +108,18 @@ namespace MovieCastIdentifier.Controllers
                         string message = "Thank you for your request. Please wait while we upload and process your file.";
                         await _hubContext.Clients.All.ReceiveMessage("", message);
                         
-                        streamedFileContent = 
-                            await FileHelpers.ProcessStreamedFile(section, contentDisposition, 
+                        // Stream the file and save it to disk using a background task
+                        _backgroundTaskQueue.EnqueueAsync(async (_serviceScopeFactory, token) =>
+                        {
+                            try{
+                                await FileHelpers.ProcessStreamedFile(section, contentDisposition, 
                                 ModelState, _permittedExtensions, _fileSizeLimit);
+                            }
+                            catch(Exception ex){
+                                _logger.LogError(ex, "Error processing streamed file");
+                            }
+                        });
+                        
 
                         if (!ModelState.IsValid)
                         {
@@ -111,24 +127,25 @@ namespace MovieCastIdentifier.Controllers
                             return BadRequest(ModelState);
                         }
 
-                        var filePath = Path.Combine(_targetFilePath, untrustedFileNameForStorage);
-                        try{
-                            using (var targetStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                            {
-                                await targetStream.WriteAsync(streamedFileContent);
+                        // var filePath = Path.Combine(_targetFilePath, untrustedFileNameForStorage);
+                        // try{
+                        //     using (var targetStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                        //     {
+                        //         await streamedFileContent.CopyToAsync(targetStream);
 
-                                _logger.LogInformation(
-                                    $"Uploaded file '{untrustedFileNameForStorage}' saved to " +
-                                    $"'{filePath}' with length {streamedFileContent.Length}.");
-                            }
-                        }
-                        catch(Exception e){
+                        //         // Notify the client that the file was uploaded successfully
+                        //         await _hubContext.Clients.All.ReceiveMessage("", 
+                        //             $"File {trustedFileNameForDisplay} uploaded successfully.");
 
-                        }
-
-                        // Notify the client that the file was uploaded successfully
-                        await _hubContext.Clients.All.ReceiveMessage("", 
-                            $"File {trustedFileNameForDisplay} uploaded successfully.");
+                        //         _logger.LogInformation(
+                        //             $"Uploaded file '{untrustedFileNameForStorage}' saved to " +
+                        //             $"'{filePath}' with length {streamedFileContent.Length}.");
+                        //     }
+                        // }
+                        // catch(Exception e){
+                        //     ModelState.AddModelError("File save", 
+                        //         $"Failed to save file {trustedFileNameForDisplay}. Error: {e.Message}");
+                        // }
                     }
                     else if (MultipartRequestHelper
                         .HasFormDataContentDisposition(contentDisposition))

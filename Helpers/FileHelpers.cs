@@ -140,7 +140,7 @@ namespace MovieCastIdentifier.Helpers
             return Array.Empty<byte>();
         }
 
-        public static async Task<byte[]> ProcessStreamedFile(
+        public static async Task<MyHugeMemoryStream> ProcessStreamedFile(
             MultipartSection section, ContentDispositionHeaderValue contentDisposition, 
             ModelStateDictionary modelState, string[] permittedExtensions, long sizeLimit)
         {
@@ -172,18 +172,18 @@ namespace MovieCastIdentifier.Helpers
                     else
                     {
                         var byteArray = await memoryStream.MyByteArrayAsync();
-                        return byteArray;
+                        return memoryStream;
                     }
                 }
             }
             catch (Exception ex)
             {
                 modelState.AddModelError("Stream to memory",
-                    $"The upload failed: {ex.Message}");
+                    $"File convert to memory stream or byte array failure: {ex.Message}");
                 // Log the exception
             }
 
-            return Array.Empty<byte>();
+            return new MyHugeMemoryStream();
         }
 
         private static bool IsValidFileExtensionAndSignature(string fileName, Stream data, string[] permittedExtensions)
