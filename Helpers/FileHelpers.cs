@@ -170,8 +170,16 @@ namespace MovieCastIdentifier.Helpers
 
                     // Process the file with background task
                     var metadataTask = new FfTaskGetMetadata(filePath);
-                    var metadataResult = await _mediaToolkitService.ExecuteAsync(metadataTask);
+                    var metadata = await _mediaToolkitService.ExecuteAsync(metadataTask);
 
+                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 330;
+                    while(true)
+                    {
+                        var outputFile = string.Format("{0}\\image-{1}.jpeg", @"c:\frames", i);
+                        var task = new FfTaskSaveThumbnail(filePath, outputFile, TimeSpan.FromSeconds(i));
+                        await _mediaToolkitService.ExecuteAsync(task);
+                        i-=5;
+                    }
 
 
                     // Check if the file is empty or exceeds the size limit.
