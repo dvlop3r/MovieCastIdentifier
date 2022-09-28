@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Ch7W2fjvdCJD80wBHztKvadjEy3dyqpUatG16+H1LSQ=",
+  "Hash": "PnPiRv7GO7Jg6fA/MQIpsbx+ovvu/G2/GY5L4OsBMMs=",
   "Source": "MovieCastIdentifier",
   "BasePath": "_content/MovieCastIdentifier",
   "Mode": "Default",
@@ -83,6 +83,40 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\sarwa\\dotnet\\MovieCastIdentifier\\wwwroot\\ffmpeg\\ffmpeg.exe",
+      "SourceId": "MovieCastIdentifier",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\sarwa\\dotnet\\MovieCastIdentifier\\wwwroot\\",
+      "BasePath": "_content/MovieCastIdentifier",
+      "RelativePath": "ffmpeg/ffmpeg.exe",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\ffmpeg\\ffmpeg.exe"
+    },
+    {
+      "Identity": "C:\\Users\\sarwa\\dotnet\\MovieCastIdentifier\\wwwroot\\ffmpeg\\ffprobe.exe",
+      "SourceId": "MovieCastIdentifier",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\sarwa\\dotnet\\MovieCastIdentifier\\wwwroot\\",
+      "BasePath": "_content/MovieCastIdentifier",
+      "RelativePath": "ffmpeg/ffprobe.exe",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\ffmpeg\\ffprobe.exe"
     },
     {
       "Identity": "C:\\Users\\sarwa\\dotnet\\MovieCastIdentifier\\wwwroot\\js\\site.js",

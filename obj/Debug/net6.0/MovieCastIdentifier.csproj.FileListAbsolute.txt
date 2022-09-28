@@ -24,3 +24,7 @@ C:\Users\sarwa\dotnet\MovieCastIdentifier\obj\Debug\net6.0\refint\MovieCastIdent
 C:\Users\sarwa\dotnet\MovieCastIdentifier\obj\Debug\net6.0\MovieCastIdentifier.pdb
 C:\Users\sarwa\dotnet\MovieCastIdentifier\obj\Debug\net6.0\MovieCastIdentifier.genruntimeconfig.cache
 C:\Users\sarwa\dotnet\MovieCastIdentifier\obj\Debug\net6.0\ref\MovieCastIdentifier.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\MedallionShell.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\MediaToolkit.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\System.IO.Abstractions.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\obj\Debug\net6.0\MovieCastIdentifier.csproj.CopyComplete
