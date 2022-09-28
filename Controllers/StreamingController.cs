@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Net;
 using System.Text;
+using MediaToolkit.Services;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -23,6 +24,9 @@ namespace MovieCastIdentifier.Controllers
         private readonly IHubContext<FileStreamHub, FileStreamClient> _hubContext;
         private readonly IBackgroundTaskQueue _backgroundTaskQueue;
         private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly string ffmpegFilePath;
+        private readonly IMediaToolkitService _mediaToolkitService;
+        private readonly IWebHostEnvironment _env;
 
         // Get the default form options so that we can use them to set the default 
         // limits for request body data.
@@ -32,7 +36,8 @@ namespace MovieCastIdentifier.Controllers
             IConfiguration config,
             IHubContext<FileStreamHub, FileStreamClient> hubContext,
             IBackgroundTaskQueue backgroundTaskQueue,
-            IServiceScopeFactory serviceScopeFactory)
+            IServiceScopeFactory serviceScopeFactory,
+            IWebHostEnvironment env)
         {
             _logger = logger;
             _fileSizeLimit = config.GetValue<long>("FileSizeLimit");
@@ -42,6 +47,9 @@ namespace MovieCastIdentifier.Controllers
             _hubContext = hubContext;
             _backgroundTaskQueue = backgroundTaskQueue;
             _serviceScopeFactory = serviceScopeFactory;
+            _env = env;
+            ffmpegFilePath = Path.Combine(_env.ContentRootPath, "ffmpeg", "ffmpeg.exe");
+            _mediaToolkitService = MediaToolkitService.CreateInstance(ffmpegFilePath);
 
             // To save physical files to the temporary files folder, use:
             //_targetFilePath = Path.GetTempPath();

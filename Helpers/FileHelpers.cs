@@ -156,7 +156,7 @@ namespace MovieCastIdentifier.Helpers
                     await section.Body.CopyToAsync(memoryStream);
                     await hubContext.Clients.All.ReceiveMessage("", "File streamed to memory successfully.");
 
-                    
+                      
 
                     // //Save file to memory
                     // var filePath = Path.Combine(rootPath , contentDisposition.FileName.ToString().Trim('"'));
