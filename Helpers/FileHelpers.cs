@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
 using MovieCastIdentifier.Services;
 using MovieCastIdentifier.SignalRHubs;
+using Patagames.Ocr;
 
 namespace MovieCastIdentifier.Helpers
 {
@@ -56,95 +57,7 @@ namespace MovieCastIdentifier.Helpers
         // systems. For more information, see the topic that accompanies this sample
         // app.
 
-        public static async Task<byte[]> ProcessFormFile<T>(IFormFile formFile, 
-            ModelStateDictionary modelState, string[] permittedExtensions, 
-            long sizeLimit)
-        {
-            var fieldDisplayName = string.Empty;
-
-            // Use reflection to obtain the display name for the model
-            // property associated with this IFormFile. If a display
-            // name isn't found, error messages simply won't show
-            // a display name.
-            MemberInfo property =
-                typeof(T).GetProperty(
-                    formFile.Name.Substring(formFile.Name.IndexOf(".",
-                    StringComparison.Ordinal) + 1));
-
-            if (property != null)
-            {
-                if (property.GetCustomAttribute(typeof(DisplayAttribute)) is
-                    DisplayAttribute displayAttribute)
-                {
-                    fieldDisplayName = $"{displayAttribute.Name} ";
-                }
-            }
-
-            // Don't trust the file name sent by the client. To display
-            // the file name, HTML-encode the value.
-            var trustedFileNameForDisplay = WebUtility.HtmlEncode(
-                formFile.FileName);
-
-            // Check the file length. This check doesn't catch files that only have 
-            // a BOM as their content.
-            if (formFile.Length == 0)
-            {
-                modelState.AddModelError(formFile.Name, 
-                    $"{fieldDisplayName}({trustedFileNameForDisplay}) is empty.");
-
-                return Array.Empty<byte>();
-            }
-            
-            if (formFile.Length > sizeLimit)
-            {
-                var megabyteSizeLimit = sizeLimit / 1048576;
-                modelState.AddModelError(formFile.Name,
-                    $"{fieldDisplayName}({trustedFileNameForDisplay}) exceeds " +
-                    $"{megabyteSizeLimit:N1} MB.");
-
-                return Array.Empty<byte>();
-            }
-
-            try
-            {
-                using (var memoryStream = new MemoryStream())
-                {
-                    await formFile.CopyToAsync(memoryStream);
-
-                    // Check the content length in case the file's only
-                    // content was a BOM and the content is actually
-                    // empty after removing the BOM.
-                    if (memoryStream.Length == 0)
-                    {
-                        modelState.AddModelError(formFile.Name,
-                            $"{fieldDisplayName}({trustedFileNameForDisplay}) is empty.");
-                    }
-
-                    if (!IsValidFileExtensionAndSignature(
-                        formFile.FileName, memoryStream, permittedExtensions))
-                    {
-                        modelState.AddModelError(formFile.Name,
-                            $"{fieldDisplayName}({trustedFileNameForDisplay}) file " +
-                            "type isn't permitted or the file's signature " +
-                            "doesn't match the file's extension.");
-                    }
-                    else
-                    {
-                        return memoryStream.ToArray();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                modelState.AddModelError(formFile.Name,
-                    $"{fieldDisplayName}({trustedFileNameForDisplay}) upload failed. " +
-                    $"Please contact the Help Desk for support. Error: {ex.HResult}");
-                // Log the exception
-            }
-
-            return Array.Empty<byte>();
-        }
-
+        
         public static async Task<MyHugeMemoryStream> ProcessFileStreaming(
             MultipartSection section, ContentDispositionHeaderValue contentDisposition, 
             ModelStateDictionary modelState, string[] permittedExtensions, long sizeLimit,
@@ -175,10 +88,18 @@ namespace MovieCastIdentifier.Helpers
                     var i = Double.Parse(metadata.Metadata.Format.Duration) - 330;
                     while(true)
                     {
+                        // Start at the end of the video and go backwards capturing a frame every 5 seconds
                         var outputFile = string.Format("{0}\\image-{1}.jpeg", @"c:\frames", i);
                         var task = new FfTaskSaveThumbnail(filePath, outputFile, TimeSpan.FromSeconds(i));
                         await _mediaToolkitService.ExecuteAsync(task);
                         i-=5;
+
+                        // Use OCR with Tesseract to extract text from the image
+                        var ocrTask = OcrApi.Create();
+                        ocrTask.Init(Patagames.Ocr.Enums.Languages.English);
+                        var result = ocrTask.GetTextFromImage(outputFile);
+                        if(result.ToLower().StartsWith("cast"))
+                            break;
                     }
 
 

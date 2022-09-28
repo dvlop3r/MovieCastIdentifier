@@ -28,3 +28,17 @@ C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\MedallionShell.dll
 C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\MediaToolkit.dll
 C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\System.IO.Abstractions.dll
 C:\Users\sarwa\dotnet\MovieCastIdentifier\obj\Debug\net6.0\MovieCastIdentifier.csproj.CopyComplete
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\x64\tesseract.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\x86\Tesseract.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\tessdata\configs\config.cfg
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\tessdata\eng.traineddata
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\tessdata\equ.traineddata
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\tessdata\osd.traineddata
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\tessdata\pdf.ttf
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\tessdata\pdf.ttx
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\System.Drawing.Common.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\Patagames.Ocr.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
