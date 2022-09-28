@@ -62,7 +62,9 @@ namespace MovieCastIdentifier.Helpers
             MultipartSection section, ContentDispositionHeaderValue contentDisposition, 
             ModelStateDictionary modelState, string[] permittedExtensions, long sizeLimit,
             IHubContext<FileStreamHub,FileStreamClient> hubContext, string rootPath,
-            IBackgroundTaskQueue queue, IServiceScopeFactory scopeFactory, IMediaToolkitService _mediaToolkitService)
+            IBackgroundTaskQueue queue, IServiceScopeFactory scopeFactory,
+            IMediaToolkitService _mediaToolkitService, string untrustedFileNameForStorage,
+            string trustedFileNameForDisplay)
         {
             try
             {
@@ -70,7 +72,7 @@ namespace MovieCastIdentifier.Helpers
                 {
                     // Stream file to memory
                     await section.Body.CopyToAsync(memoryStream);
-                    await hubContext.Clients.All.ReceiveMessage("", "File uploaded and streamed to memory successfully.");
+                    await hubContext.Clients.All.ReceiveMessage("", $"File \"{trustedFileNameForDisplay}\" uploaded and streamed to memory successfully.");
 
                     // Save file to disk
                     var filePath = Path.Combine(rootPath , contentDisposition.FileName.ToString().Trim('"'));
@@ -78,7 +80,7 @@ namespace MovieCastIdentifier.Helpers
                     {
                         memoryStream.Seek(0, SeekOrigin.Begin);
                         await memoryStream.CopyToAsync(fileStream);
-                        await hubContext.Clients.All.ReceiveMessage("", "File saved to disk successfully.");
+                        await hubContext.Clients.All.ReceiveMessage("", $"File \"{trustedFileNameForDisplay}\" saved to disk successfully.");
                     }
 
                     // Process the file with background task
@@ -99,7 +101,17 @@ namespace MovieCastIdentifier.Helpers
                         ocrTask.Init(Patagames.Ocr.Enums.Languages.English);
                         var result = ocrTask.GetTextFromImage(outputFile);
                         if(result.ToLower().StartsWith("cast"))
+                        {
+                            // Some checks to make sure we have the right frame
+                            var index = result.IndexOf("\\n");
+                            var cast = result.Substring(0, index).Trim().ToLower();
+                            if(!string.Equals(cast, "cast"))
+                                continue;
+
+                            // Extract the cast list
+
                             break;
+                        }
                     }
 
 
@@ -129,8 +141,8 @@ namespace MovieCastIdentifier.Helpers
             }
             catch (Exception ex)
             {
-                modelState.AddModelError("Stream to memory",
-                    $"File convert to memory stream or byte array failure: {ex.Message}");
+                modelState.AddModelError("File process",
+                    $"Failed to process the file {ex.Message}");
                 // Log the exception
             }
 
