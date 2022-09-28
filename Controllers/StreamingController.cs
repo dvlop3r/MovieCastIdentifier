@@ -116,12 +116,9 @@ namespace MovieCastIdentifier.Controllers
                         string message = "Thank you for your request. Please wait while we upload and process your file.";
                         await _hubContext.Clients.All.ReceiveMessage("", message);
                         
-                        // Stream the file and save it to disk using a background task
-                        _backgroundTaskQueue.EnqueueAsync(async (_serviceScopeFactory, token) =>
-                        {
-                            await FileHelpers.ProcessFileStreaming(section, contentDisposition, 
-                            ModelState, _permittedExtensions, _fileSizeLimit, _hubContext, _targetFilePath);                            
-                        });
+                        await FileHelpers.ProcessFileStreaming(section, contentDisposition, 
+                            ModelState, _permittedExtensions, _fileSizeLimit, _hubContext, _targetFilePath,
+                            _backgroundTaskQueue, _serviceScopeFactory, _mediaToolkitService);
                         
 
                         if (!ModelState.IsValid)

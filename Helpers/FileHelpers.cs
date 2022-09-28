@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
+using MovieCastIdentifier.Services;
 using MovieCastIdentifier.SignalRHubs;
 
 namespace MovieCastIdentifier.Helpers
@@ -146,7 +147,8 @@ namespace MovieCastIdentifier.Helpers
         public static async Task<MyHugeMemoryStream> ProcessFileStreaming(
             MultipartSection section, ContentDispositionHeaderValue contentDisposition, 
             ModelStateDictionary modelState, string[] permittedExtensions, long sizeLimit,
-            IHubContext<FileStreamHub,FileStreamClient> hubContext, string rootPath)
+            IHubContext<FileStreamHub,FileStreamClient> hubContext, string rootPath,
+            IBackgroundTaskQueue queue, IServiceScopeFactory scopeFactory, IMediaToolkitService _mediaToolkitService)
         {
             try
             {
