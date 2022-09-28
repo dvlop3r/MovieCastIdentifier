@@ -1,7 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.Drawing;
-using System.Net;
-using System.Reflection;
 using MediaToolkit.Services;
 using MediaToolkit.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -11,7 +7,6 @@ using Microsoft.Net.Http.Headers;
 using MovieCastIdentifier.Services;
 using MovieCastIdentifier.SignalRHubs;
 using Patagames.Ocr;
-using Tesseract;
 
 namespace MovieCastIdentifier.Helpers
 {
@@ -89,7 +84,7 @@ namespace MovieCastIdentifier.Helpers
                     var metadataTask = new FfTaskGetMetadata(filePath);
                     var metadata = await _mediaToolkitService.ExecuteAsync(metadataTask);
 
-                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 290;
+                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 343;
                     while(true)
                     {
                         // Start at the end of the video and go backwards capturing a frame every 5 seconds
@@ -98,14 +93,16 @@ namespace MovieCastIdentifier.Helpers
                         await _mediaToolkitService.ExecuteAsync(task);
                         i-=5;
 
-                        // Use Tesseract OCR to extract text from the frame
+                        // Use Tesseract.Net.Sdk OCR to extract text from the frame
                         var ocrTask = OcrApi.Create();
                         ocrTask.Init(Patagames.Ocr.Enums.Languages.English);
                         var result = ocrTask.GetTextFromImage(outputFile);
 
+                        // Tesseract package commented out, Tesseract.Net.Sdk is fater and more accurate
                         // var ocr = new TesseractEngine("./tessdata", "eng", EngineMode.Default);
                         // var page = ocr.Process(Pix.LoadFromFile(outputFile));
                         // var result = page.GetText();
+
                         if(result.ToLower().StartsWith("cast"))
                         {
                             // Get the cast list

@@ -42,8 +42,3 @@ C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\Patagames.Ocr.dll
 C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
 C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
-C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\x86\leptonica-1.80.0.dll
-C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\x86\tesseract41.dll
-C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\x64\leptonica-1.80.0.dll
-C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\x64\tesseract41.dll
-C:\Users\sarwa\dotnet\MovieCastIdentifier\bin\Debug\net6.0\Tesseract.dll

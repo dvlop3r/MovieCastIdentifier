@@ -43,13 +43,13 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "IronOcr": {
+              "target": "Package",
+              "version": "[2022.10.9390, )"
+            },
             "MediaToolkit.NetCore": {
               "target": "Package",
               "version": "[0.2.1-preview, )"
-            },
-            "Tesseract": {
-              "target": "Package",
-              "version": "[4.1.1, )"
             },
             "Tesseract.Net.SDK": {
               "target": "Package",
