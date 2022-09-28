@@ -74,7 +74,7 @@ namespace MovieCastIdentifier.Helpers
 
                     // Save file to disk
                     var filePath = Path.Combine(rootPath , contentDisposition.FileName.ToString().Trim('"'));
-                    using(var fileStream = File.Create(filePath))
+                    using(var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                     {
                         memoryStream.Seek(0, SeekOrigin.Begin);
                         await memoryStream.CopyToAsync(fileStream);
@@ -85,7 +85,7 @@ namespace MovieCastIdentifier.Helpers
                     var metadataTask = new FfTaskGetMetadata(filePath);
                     var metadata = await _mediaToolkitService.ExecuteAsync(metadataTask);
 
-                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 330;
+                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 220;
                     while(true)
                     {
                         // Start at the end of the video and go backwards capturing a frame every 5 seconds
