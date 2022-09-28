@@ -11,18 +11,20 @@
     enctype="multipart/form-data" onsubmit="AJAXSubmit(this);return false;">
     <dl>
         <dt>
-            <label for="title" class="col-2 col-form-label">File title</label>
+            <label for="title" class="col-2 col-form-label">Movie title</label>
         </dt>
         <dd>
-            <div class="col col-sm-6">
-                <input id="title" name="title" class="form-control" />
-            </div>
+          <div class="col col-sm-6">
+              <input id="title" name="title" class="form-control" />
+          </div>
         </dd>
         <dt>
-            <label for="file" class="col-2 col-form-label">File</label>
+            <label for="file" class="col-2 col-form-label">Upload movie</label>
         </dt>
         <dd>
-            <input id="file" type="file" name="file" />
+          <div class="col col-sm-6">
+            <input id="file" type="file" name="file" class="form-control" />
+          </div>
         </dd>
     </dl>
 

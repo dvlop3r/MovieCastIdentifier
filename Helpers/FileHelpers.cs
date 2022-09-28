@@ -2,8 +2,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
+using MovieCastIdentifier.SignalRHubs;
 
 namespace MovieCastIdentifier.Helpers
 {
@@ -140,15 +142,28 @@ namespace MovieCastIdentifier.Helpers
             return Array.Empty<byte>();
         }
 
-        public static async Task<MyHugeMemoryStream> ProcessStreamedFile(
+        public static async Task<MyHugeMemoryStream> ProcessFileStreaming(
             MultipartSection section, ContentDispositionHeaderValue contentDisposition, 
-            ModelStateDictionary modelState, string[] permittedExtensions, long sizeLimit)
+            ModelStateDictionary modelState, string[] permittedExtensions, long sizeLimit,
+            IHubContext<FileStreamHub,FileStreamClient> hubContext, string rootPath)
         {
             try
             {
                 using (var memoryStream = new MyHugeMemoryStream())
                 {
+                    // Stream file to memory
                     await section.Body.CopyToAsync(memoryStream);
+                    await hubContext.Clients.All.ReceiveMessage("", "File streamed to memory successfully.");
+
+                    //Save file to memory
+                    var filePath = Path.Combine(rootPath , contentDisposition.FileName.ToString().Trim('"'));
+                    using(var fileStream = File.Create(filePath))
+                    {
+                        memoryStream.Seek(0, SeekOrigin.Begin);
+                        await memoryStream.CopyToAsync(fileStream);
+                        await hubContext.Clients.All.ReceiveMessage("", "File saved to disk successfully.");
+                    }
+
 
                     // Check if the file is empty or exceeds the size limit.
                     if (memoryStream.Length == 0)
@@ -161,9 +176,7 @@ namespace MovieCastIdentifier.Helpers
                         modelState.AddModelError("File",
                         $"The file exceeds {megabyteSizeLimit:N1} MB.");
                     }
-                    else if (!IsValidFileExtensionAndSignature(
-                        contentDisposition.FileName.Value, memoryStream, 
-                        permittedExtensions))
+                    else if (!IsValidFileExtensionAndSignature(contentDisposition.FileName.Value, memoryStream,permittedExtensions))
                     {
                         modelState.AddModelError("File",
                             "The file type isn't permitted or the file's " +

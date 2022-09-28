@@ -111,13 +111,8 @@ namespace MovieCastIdentifier.Controllers
                         // Stream the file and save it to disk using a background task
                         _backgroundTaskQueue.EnqueueAsync(async (_serviceScopeFactory, token) =>
                         {
-                            try{
-                                await FileHelpers.ProcessStreamedFile(section, contentDisposition, 
-                                ModelState, _permittedExtensions, _fileSizeLimit);
-                            }
-                            catch(Exception ex){
-                                _logger.LogError(ex, "Error processing streamed file");
-                            }
+                            await FileHelpers.ProcessFileStreaming(section, contentDisposition, 
+                            ModelState, _permittedExtensions, _fileSizeLimit, _hubContext, _targetFilePath);                            
                         });
                         
 
