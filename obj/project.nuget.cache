@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "huw3FDv2/X6hcxpkuAzFDMAUSVMzM6dbIt5Gz+OAHDgAiQSF26IRTQ0QuBzJU4d4ys/FFqzkuC/EQ4aFpdIOIA==",
+  "dgSpecHash": "isMnF/p4DDz8WIuPBbLcUon8RS90H9WRxtgVW5bRNJ9LPuOWDTFEaKh8ZhvZM/0ZF3ZiDfNo4MfPENiNf0Hnmg==",
   "success": true,
   "projectFilePath": "C:\\Users\\sarwa\\dotnet\\MovieCastIdentifier\\MovieCastIdentifier.csproj",
   "expectedPackageFiles": [
@@ -12,9 +12,11 @@
     "C:\\Users\\sarwa\\.nuget\\packages\\system.drawing.common\\5.0.0\\system.drawing.common.5.0.0.nupkg.sha512",
     "C:\\Users\\sarwa\\.nuget\\packages\\system.io.abstractions\\9.0.4\\system.io.abstractions.9.0.4.nupkg.sha512",
     "C:\\Users\\sarwa\\.nuget\\packages\\system.io.filesystem.accesscontrol\\4.7.0\\system.io.filesystem.accesscontrol.4.7.0.nupkg.sha512",
+    "C:\\Users\\sarwa\\.nuget\\packages\\system.reflection.emit\\4.7.0\\system.reflection.emit.4.7.0.nupkg.sha512",
     "C:\\Users\\sarwa\\.nuget\\packages\\system.security.accesscontrol\\4.7.0\\system.security.accesscontrol.4.7.0.nupkg.sha512",
     "C:\\Users\\sarwa\\.nuget\\packages\\system.security.principal.windows\\4.7.0\\system.security.principal.windows.4.7.0.nupkg.sha512",
     "C:\\Users\\sarwa\\.nuget\\packages\\system.text.json\\4.6.0\\system.text.json.4.6.0.nupkg.sha512",
+    "C:\\Users\\sarwa\\.nuget\\packages\\tesseract\\4.1.1\\tesseract.4.1.1.nupkg.sha512",
     "C:\\Users\\sarwa\\.nuget\\packages\\tesseract.net.sdk\\4.5.411\\tesseract.net.sdk.4.5.411.nupkg.sha512"
   ],
   "logs": []

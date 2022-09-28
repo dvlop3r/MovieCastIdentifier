@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Drawing;
 using System.Net;
 using System.Reflection;
 using MediaToolkit.Services;
@@ -10,6 +11,7 @@ using Microsoft.Net.Http.Headers;
 using MovieCastIdentifier.Services;
 using MovieCastIdentifier.SignalRHubs;
 using Patagames.Ocr;
+using Tesseract;
 
 namespace MovieCastIdentifier.Helpers
 {
@@ -80,7 +82,7 @@ namespace MovieCastIdentifier.Helpers
                     {
                         memoryStream.Seek(0, SeekOrigin.Begin);
                         await memoryStream.CopyToAsync(fileStream);
-                        await hubContext.Clients.All.ReceiveMessage("", $"File \"{trustedFileNameForDisplay}\" saved to disk successfully.");
+                        await hubContext.Clients.All.ReceiveMessage("", $"File \"{trustedFileNameForDisplay}\" stored on disk successfully.");
                     }
 
                     // Process the file with background task
@@ -97,9 +99,13 @@ namespace MovieCastIdentifier.Helpers
                         i-=5;
 
                         // Use Tesseract OCR to extract text from the frame
-                        var ocrTask = OcrApi.Create();
-                        ocrTask.Init(Patagames.Ocr.Enums.Languages.English);
-                        var result = ocrTask.GetTextFromImage(outputFile);
+                        // var ocrTask = OcrApi.Create();
+                        // ocrTask.Init(Patagames.Ocr.Enums.Languages.English);
+                        // var result = ocrTask.GetTextFromImage(outputFile);
+
+                        var ocr = new TesseractEngine("./tessdata", "eng", EngineMode.Default);
+                        var page = ocr.Process(Pix.LoadFromFile(outputFile));
+                        var result = page.GetText();
                         if(result.ToLower().StartsWith("cast"))
                         {
                             // Get the cast list
