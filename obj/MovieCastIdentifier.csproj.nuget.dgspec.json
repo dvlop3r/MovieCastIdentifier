@@ -46,6 +46,10 @@
             "MediaToolkit.NetCore": {
               "target": "Package",
               "version": "[0.2.1-preview, )"
+            },
+            "Tesseract.Net.SDK": {
+              "target": "Package",
+              "version": "[4.5.411, )"
             }
           },
           "imports": [

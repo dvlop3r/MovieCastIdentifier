@@ -1,18 +1,21 @@
 {
   "version": 2,
-  "dgSpecHash": "6KFohAlQEOapdnfaaLdnZsRFdU/qGIGd2VssYebxAortqEtilzubyOHvdB38zijPGj9RNamrHNHTva6kqj+4ow==",
+  "dgSpecHash": "huw3FDv2/X6hcxpkuAzFDMAUSVMzM6dbIt5Gz+OAHDgAiQSF26IRTQ0QuBzJU4d4ys/FFqzkuC/EQ4aFpdIOIA==",
   "success": true,
   "projectFilePath": "C:\\Users\\sarwa\\dotnet\\MovieCastIdentifier\\MovieCastIdentifier.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sarwa\\.nuget\\packages\\medallionshell\\1.6.1\\medallionshell.1.6.1.nupkg.sha512",
     "C:\\Users\\sarwa\\.nuget\\packages\\mediatoolkit.netcore\\0.2.1-preview\\mediatoolkit.netcore.0.2.1-preview.nupkg.sha512",
     "C:\\Users\\sarwa\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\2.0.0\\microsoft.extensions.dependencyinjection.abstractions.2.0.0.nupkg.sha512",
-    "C:\\Users\\sarwa\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
+    "C:\\Users\\sarwa\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+    "C:\\Users\\sarwa\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
+    "C:\\Users\\sarwa\\.nuget\\packages\\system.drawing.common\\5.0.0\\system.drawing.common.5.0.0.nupkg.sha512",
     "C:\\Users\\sarwa\\.nuget\\packages\\system.io.abstractions\\9.0.4\\system.io.abstractions.9.0.4.nupkg.sha512",
     "C:\\Users\\sarwa\\.nuget\\packages\\system.io.filesystem.accesscontrol\\4.7.0\\system.io.filesystem.accesscontrol.4.7.0.nupkg.sha512",
     "C:\\Users\\sarwa\\.nuget\\packages\\system.security.accesscontrol\\4.7.0\\system.security.accesscontrol.4.7.0.nupkg.sha512",
     "C:\\Users\\sarwa\\.nuget\\packages\\system.security.principal.windows\\4.7.0\\system.security.principal.windows.4.7.0.nupkg.sha512",
-    "C:\\Users\\sarwa\\.nuget\\packages\\system.text.json\\4.6.0\\system.text.json.4.6.0.nupkg.sha512"
+    "C:\\Users\\sarwa\\.nuget\\packages\\system.text.json\\4.6.0\\system.text.json.4.6.0.nupkg.sha512",
+    "C:\\Users\\sarwa\\.nuget\\packages\\tesseract.net.sdk\\4.5.411\\tesseract.net.sdk.4.5.411.nupkg.sha512"
   ],
   "logs": []
 }
