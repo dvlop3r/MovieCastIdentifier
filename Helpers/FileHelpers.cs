@@ -1,3 +1,4 @@
+using IronOcr;
 using MediaToolkit.Services;
 using MediaToolkit.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -94,19 +95,22 @@ namespace MovieCastIdentifier.Helpers
                         i-=5;
 
                         // Use Tesseract.Net.Sdk OCR to extract text from the frame
-                        var ocrTask = OcrApi.Create();
-                        ocrTask.Init(Patagames.Ocr.Enums.Languages.English);
-                        var result = ocrTask.GetTextFromImage(outputFile);
+                        // var ocrTask = OcrApi.Create();
+                        // ocrTask.Init(Patagames.Ocr.Enums.Languages.English);
+                        // var result = ocrTask.GetTextFromImage(outputFile);
 
                         // Tesseract package commented out, Tesseract.Net.Sdk is fater and more accurate
                         // var ocr = new TesseractEngine("./tessdata", "eng", EngineMode.Default);
                         // var page = ocr.Process(Pix.LoadFromFile(outputFile));
                         // var result = page.GetText();
 
-                        if(result.ToLower().StartsWith("cast"))
+                        var ocr = new IronTesseract();
+                        var result = await ocr.ReadAsync(outputFile);
+
+                        if(result.Text.ToLower().StartsWith("cast"))
                         {
                             // Get the cast list
-                            var castList = result.Split("\n");
+                            var castList = result.Text.Split("\n");
                             // Ensure we have the right frame
                             if(!string.Equals(castList[0].ToLower(), "cast"))
                                 continue;
