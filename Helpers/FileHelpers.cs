@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Reflection;
 using MediaToolkit.Services;
+using MediaToolkit.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.WebUtilities;
@@ -156,18 +157,21 @@ namespace MovieCastIdentifier.Helpers
                 {
                     // Stream file to memory
                     await section.Body.CopyToAsync(memoryStream);
-                    await hubContext.Clients.All.ReceiveMessage("", "File streamed to memory successfully.");
+                    await hubContext.Clients.All.ReceiveMessage("", "File uploaded and streamed to memory successfully.");
 
-                      
+                    // Save file to disk
+                    var filePath = Path.Combine(rootPath , contentDisposition.FileName.ToString().Trim('"'));
+                    using(var fileStream = File.Create(filePath))
+                    {
+                        memoryStream.Seek(0, SeekOrigin.Begin);
+                        await memoryStream.CopyToAsync(fileStream);
+                        await hubContext.Clients.All.ReceiveMessage("", "File saved to disk successfully.");
+                    }
 
-                    // //Save file to memory
-                    // var filePath = Path.Combine(rootPath , contentDisposition.FileName.ToString().Trim('"'));
-                    // using(var fileStream = File.Create(filePath))
-                    // {
-                    //     memoryStream.Seek(0, SeekOrigin.Begin);
-                    //     await memoryStream.CopyToAsync(fileStream);
-                    //     await hubContext.Clients.All.ReceiveMessage("", "File saved to disk successfully.");
-                    // }
+                    // Process the file with background task
+                    var metadataTask = new FfTaskGetMetadata(filePath);
+                    var metadataResult = await _mediaToolkitService.ExecuteAsync(metadataTask);
+
 
 
                     // Check if the file is empty or exceeds the size limit.
