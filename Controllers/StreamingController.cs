@@ -113,8 +113,8 @@ namespace MovieCastIdentifier.Controllers
                                 contentDisposition.FileName.Value);
 
                         // Notify the client that the upload is starting
-                        string message = "Please wait while we upload and "+
-                            "process your file. You will receive a response shortly.";
+                        string message = "Thank you for your request. Please wait while we upload and "+
+                            $"process your file.{Environment.NewLine}You will receive a response shortly.";
                         await _hubContext.Clients.All.ReceiveMessage("", message);
                         
                         // Upload and process the file

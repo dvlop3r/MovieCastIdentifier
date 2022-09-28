@@ -87,7 +87,7 @@ namespace MovieCastIdentifier.Helpers
                     var metadataTask = new FfTaskGetMetadata(filePath);
                     var metadata = await _mediaToolkitService.ExecuteAsync(metadataTask);
 
-                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 220;
+                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 240;
                     while(true)
                     {
                         // Start at the end of the video and go backwards capturing a frame every 5 seconds
@@ -96,19 +96,22 @@ namespace MovieCastIdentifier.Helpers
                         await _mediaToolkitService.ExecuteAsync(task);
                         i-=5;
 
-                        // Use OCR with Tesseract to extract text from the image
+                        // Use Tesseract OCR to extract text from the frame
                         var ocrTask = OcrApi.Create();
                         ocrTask.Init(Patagames.Ocr.Enums.Languages.English);
                         var result = ocrTask.GetTextFromImage(outputFile);
                         if(result.ToLower().StartsWith("cast"))
                         {
-                            // Some checks to make sure we have the right frame
-                            var index = result.IndexOf("\\n");
-                            var cast = result.Substring(0, index).Trim().ToLower();
-                            if(!string.Equals(cast, "cast"))
+                            // Get the cast list
+                            var castList = result.Split("\n");
+                            // Ensure we have the right frame
+                            if(!string.Equals(castList[0].ToLower(), "cast"))
                                 continue;
 
-                            // Extract the cast list
+                            // Get the cast members
+                            var castMembers = castList.Skip(1).Take(5);
+                            // Get their info from IMDB
+
 
                             break;
                         }
