@@ -89,7 +89,7 @@ namespace MovieCastIdentifier.Helpers
                     var metadataTask = new FfTaskGetMetadata(filePath);
                     var metadata = await _mediaToolkitService.ExecuteAsync(metadataTask);
 
-                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 240;
+                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 290;
                     while(true)
                     {
                         // Start at the end of the video and go backwards capturing a frame every 5 seconds
@@ -99,13 +99,13 @@ namespace MovieCastIdentifier.Helpers
                         i-=5;
 
                         // Use Tesseract OCR to extract text from the frame
-                        // var ocrTask = OcrApi.Create();
-                        // ocrTask.Init(Patagames.Ocr.Enums.Languages.English);
-                        // var result = ocrTask.GetTextFromImage(outputFile);
+                        var ocrTask = OcrApi.Create();
+                        ocrTask.Init(Patagames.Ocr.Enums.Languages.English);
+                        var result = ocrTask.GetTextFromImage(outputFile);
 
-                        var ocr = new TesseractEngine("./tessdata", "eng", EngineMode.Default);
-                        var page = ocr.Process(Pix.LoadFromFile(outputFile));
-                        var result = page.GetText();
+                        // var ocr = new TesseractEngine("./tessdata", "eng", EngineMode.Default);
+                        // var page = ocr.Process(Pix.LoadFromFile(outputFile));
+                        // var result = page.GetText();
                         if(result.ToLower().StartsWith("cast"))
                         {
                             // Get the cast list
