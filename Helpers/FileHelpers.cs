@@ -85,7 +85,7 @@ namespace MovieCastIdentifier.Helpers
                     var metadataTask = new FfTaskGetMetadata(filePath);
                     var metadata = await _mediaToolkitService.ExecuteAsync(metadataTask);
 
-                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 343;
+                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 342;
                     while(true)
                     {
                         // Start at the end of the video and go backwards capturing a frame every 5 seconds
@@ -105,18 +105,28 @@ namespace MovieCastIdentifier.Helpers
                         // var result = page.GetText();
 
                         var ocr = new IronTesseract();
-                        var result = await ocr.ReadAsync(outputFile);
+                        var input = new OcrInput(outputFile);
+                        var result = ocr.Read(input);
+                        var text = result.Text;
 
-                        if(result.Text.ToLower().StartsWith("cast"))
+                        if(text.ToLower().StartsWith("cast"))
                         {
                             // Get the cast list
-                            var castList = result.Text.Split("\n");
+                            var castList = text.Split("\n");
+                            // Remove empty, \r and \n from the cast list
+                            var cleanList = new List<string>();
+                            castList.ToList().ForEach(x => 
+                            {
+                                var clean = x.Replace("\r", "").Replace("\n", "");
+                                if(!string.IsNullOrEmpty(clean))
+                                    cleanList.Add(clean);
+                            });
                             // Ensure we have the right frame
-                            if(!string.Equals(castList[0].ToLower(), "cast"))
+                            if(!string.Equals(cleanList.First().ToLower(), "cast"))
                                 continue;
 
-                            // Get the cast members
-                            var castMembers = castList.Skip(1).Take(5);
+                            // Get the first 5 cast members
+                            var castMembers = cleanList.Skip((cleanList.Count/2)+1).Take(5).ToList();
                             // Get their info from IMDB
 
 
@@ -152,7 +162,7 @@ namespace MovieCastIdentifier.Helpers
             catch (Exception ex)
             {
                 modelState.AddModelError("File process",
-                    $"Failed to process the file {ex.Message}");
+                    $"Failed to process the file: {ex.Message}");
                 // Log the exception
             }
 
