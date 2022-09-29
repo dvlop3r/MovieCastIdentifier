@@ -72,7 +72,8 @@ namespace MovieCastIdentifier.Helpers
                     await section.Body.CopyToAsync(memoryStream);
                     await hubContext.Clients.All.ReceiveMessage("", $"File \"{trustedFileNameForDisplay}\" uploaded and streamed to memory successfully.");
 
-                    // Save file to disk
+                    // Save file to disk, direct reading from section body is possible but writing to
+                    // and then reading from memory stream is faster and more efficient
                     var filePath = Path.Combine(rootPath , contentDisposition.FileName.ToString().Trim('"'));
                     using(var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                     {
@@ -85,11 +86,11 @@ namespace MovieCastIdentifier.Helpers
                     var metadataTask = new FfTaskGetMetadata(filePath);
                     var metadata = await _mediaToolkitService.ExecuteAsync(metadataTask);
 
-                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 342;
+                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 240;
                     while(true)
                     {
                         // Start at the end of the video and go backwards capturing a frame every 5 seconds
-                        var outputFile = string.Format("{0}\\image-{1}.jpeg", @"c:\frames", i);
+                        var outputFile = string.Format("{0}\\frame{1}.jpeg", @"c:\frames", (int)i);
                         var task = new FfTaskSaveThumbnail(filePath, outputFile, TimeSpan.FromSeconds(i));
                         await _mediaToolkitService.ExecuteAsync(task);
                         i-=5;
@@ -99,14 +100,15 @@ namespace MovieCastIdentifier.Helpers
                         // ocrTask.Init(Patagames.Ocr.Enums.Languages.English);
                         // var result = ocrTask.GetTextFromImage(outputFile);
 
-                        // Tesseract package commented out, Tesseract.Net.Sdk is fater and more accurate
+                        // Tesseract package, Tesseract.Net.Sdk is fater and more accurate
                         // var ocr = new TesseractEngine("./tessdata", "eng", EngineMode.Default);
                         // var page = ocr.Process(Pix.LoadFromFile(outputFile));
                         // var result = page.GetText();
 
+                        // Using IronOcr, most efficient and accurate OCR package
                         var ocr = new IronTesseract();
                         var input = new OcrInput(outputFile);
-                        var result = ocr.Read(input);
+                        var result = ocr.Read(input.Binarize());
                         var text = result.Text;
 
                         if(text.ToLower().StartsWith("cast"))
@@ -126,8 +128,12 @@ namespace MovieCastIdentifier.Helpers
                                 continue;
 
                             // Get the first 5 cast members
-                            var castMembers = cleanList.Skip((cleanList.Count/2)+1).Take(5).ToList();
+                            var castMembers = cleanList.SkipWhile(x => x.ToLower() == "cast").Take(5).ToList();
+                            // Get real member names
+                            var realMembers = cleanList.Skip((cleanList.Count/2)).Take(5).ToList();
+
                             // Get their info from IMDB
+                            var imdb = "new ImdbApi()";
 
 
                             break;
