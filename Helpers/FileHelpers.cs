@@ -79,7 +79,9 @@ namespace MovieCastIdentifier.Helpers
                     {
                         memoryStream.Seek(0, SeekOrigin.Begin);
                         await memoryStream.CopyToAsync(fileStream);
-                        await hubContext.Clients.All.ReceiveMessage("", $"File \"{trustedFileNameForDisplay}\" stored on disk successfully.");
+                        var hubMessage = $"File \"{trustedFileNameForDisplay}\" stored on disk successfully."+
+                        $"{Environment.NewLine}Now sit back until we process the movie. This should only take a couple of minutes!";
+                        await hubContext.Clients.All.ReceiveMessage("", hubMessage);
                     }
 
                     // Process the file with background task
@@ -108,12 +110,13 @@ namespace MovieCastIdentifier.Helpers
                         // Using IronOcr, most efficient and accurate OCR package
                         var ocr = new IronTesseract();
                         var input = new OcrInput(outputFile);
-                        var result = ocr.Read(input.Binarize());
-                        var text = result.Text;
+                        var result = ocr.Read(input);
 
-                        if(text.ToLower().StartsWith("cast"))
+                        if(result.Text.ToLower().Contains("cast"))
                         {
                             // Get the cast list
+                            // get index of cast
+                            var text = result.Text.Substring(result.Text.ToLower().IndexOf("cast"), result.Text.Length);
                             var castList = text.Split("\n");
                             // Remove empty, \r and \n from the cast list
                             var cleanList = new List<string>();
@@ -129,7 +132,7 @@ namespace MovieCastIdentifier.Helpers
 
                             // Get the first 5 cast members
                             var castMembers = cleanList.SkipWhile(x => x.ToLower() == "cast").Take(5).ToList();
-                            // Get real member names
+                            // Get real member names (not accurate)
                             var realMembers = cleanList.Skip((cleanList.Count/2)).Take(5).ToList();
 
                             // Get their info from IMDB
