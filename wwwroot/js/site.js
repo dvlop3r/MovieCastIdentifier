@@ -65,6 +65,8 @@ function callImdb() {
         }
     };
     
+    console.log("Calling IMDB...............................");
+
     fetch('https://online-movie-database.p.rapidapi.com/auto-complete?q=Matt%20damon', options)
         .then(response => response.json())
         .then(response => console.log(response))

@@ -136,8 +136,9 @@ namespace MovieCastIdentifier.Helpers
                             // Get real member names (not accurate)
                             var realMembers = cleanList.Skip((cleanList.Count/2)+1).Take(5).ToList();
 
-                            // Get their info from IMDB
-                            var imdb = "new ImdbApi()";
+                            // Call the JS CallImdb function via SignalR to get the IMDB data
+                            await hubContext.Clients.All.CallImdb(string.Join(",", castMembers));
+                            
 
 
                             break;
