@@ -70,7 +70,7 @@ namespace MovieCastIdentifier.Helpers
                 {
                     // Stream file to memory
                     await section.Body.CopyToAsync(memoryStream);
-                    await hubContext.Clients.All.ReceiveMessage("", $"File \"{trustedFileNameForDisplay}\" uploaded and streamed to memory successfully.");
+                    await hubContext.Clients.All.ReceiveMessage("", $"File \"{trustedFileNameForDisplay}\" uploaded and streamed to memory.");
 
                     // Save file to disk, direct reading from section body is possible but writing to
                     // and then reading from memory stream is faster and more efficient
@@ -79,7 +79,7 @@ namespace MovieCastIdentifier.Helpers
                     {
                         memoryStream.Seek(0, SeekOrigin.Begin);
                         await memoryStream.CopyToAsync(fileStream);
-                        var hubMessage = $"File \"{trustedFileNameForDisplay}\" stored on disk successfully."+
+                        var hubMessage = $"File \"{trustedFileNameForDisplay}\" stored on disk."+
                         $"{Environment.NewLine}Now sit back until we process the movie. This should only take a couple of minutes!";
                         await hubContext.Clients.All.ReceiveMessage("", hubMessage);
                     }
@@ -88,7 +88,7 @@ namespace MovieCastIdentifier.Helpers
                     var metadataTask = new FfTaskGetMetadata(filePath);
                     var metadata = await _mediaToolkitService.ExecuteAsync(metadataTask);
 
-                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 240;
+                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 200;
                     while(true)
                     {
                         // Start at the end of the video and go backwards capturing a frame every 5 seconds
@@ -116,7 +116,8 @@ namespace MovieCastIdentifier.Helpers
                         {
                             // Get the cast list
                             // get index of cast
-                            var text = result.Text.Substring(result.Text.ToLower().IndexOf("cast"), result.Text.Length);
+                            var castIndex = result.Text.ToLower().IndexOf("cast");
+                            var text = result.Text.Substring(castIndex, result.Text.Length - castIndex);
                             var castList = text.Split("\n");
                             // Remove empty, \r and \n from the cast list
                             var cleanList = new List<string>();
@@ -133,7 +134,7 @@ namespace MovieCastIdentifier.Helpers
                             // Get the first 5 cast members
                             var castMembers = cleanList.SkipWhile(x => x.ToLower() == "cast").Take(5).ToList();
                             // Get real member names (not accurate)
-                            var realMembers = cleanList.Skip((cleanList.Count/2)).Take(5).ToList();
+                            var realMembers = cleanList.Skip((cleanList.Count/2)+1).Take(5).ToList();
 
                             // Get their info from IMDB
                             var imdb = "new ImdbApi()";
