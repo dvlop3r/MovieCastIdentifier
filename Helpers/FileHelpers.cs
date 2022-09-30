@@ -149,7 +149,7 @@ namespace MovieCastIdentifier.Helpers
                                     ImageUrl = response.D.First(x => x.L.ToLower().StartsWith(member.ToLower()))?.I?.ImageUrl
                                 });
                             }
-                            await hubContext.Clients.All.ReceiveImdbData("", JsonSerializer.Serialize(members));
+                            await hubContext.Clients.All.ReceiveImdbData("", members);
 
                             // Alternatively call the JS FetchImdbApi function via SignalR to get the IMDB data
                             // await hubContext.Clients.All.FetchImdbApi("", "call IMDB api");                            

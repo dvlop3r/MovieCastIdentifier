@@ -27,15 +27,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // <snippet_ReceiveImdbData>
     connection.on("ReceiveImdbData", (user, members) => {
-        console.log("Fetched data from Imdb: " + members.json);
-        $("#message").text(members);
-        const data = members.json();
-        // data.D.map((item) => {
-        //     const name = data.L;
-        //     const imageUrl = data.ImageUrl;
-        //     const cast = `<div><h5>{name}</h5><img src={imageUrl} /></div>`;
-        //     $(".Imdb").text() += $(".Imdb").text(cast);
-        // })
+        console.log("Received message from imdb: "+ members);
+        members.forEach(member => {
+            const name = member.name;
+            const imageUrl = member.imageUrl;
+            const img = `<img src="${imageUrl}" height="100" width="100" />`
+            const cast = `<div class="member"><h5>${name}</h5>${img}</div>`;
+            $("#Imdb").append(cast);
+        });
     });
     // </snippet_ReceiveImdbData>
 

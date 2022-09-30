@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.SignalR;
+using MovieCastIdentifier.Models;
 
 namespace MovieCastIdentifier.SignalRHubs;
 
@@ -12,7 +13,7 @@ public class FileStreamHub : Hub<FileStreamClient>
     {
         await Clients.All.FetchImdbApi(user, message);
     }
-    public async Task SendImdbData(string user, string members)
+    public async Task SendImdbData(string user, List<Member> members)
     {
         await Clients.All.ReceiveImdbData(user, members);
     }
