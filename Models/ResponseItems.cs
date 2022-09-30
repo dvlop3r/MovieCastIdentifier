@@ -11,7 +11,7 @@ public class ResponseItem
 
 public class SubItem
 {
-    public double Height { get; set; }
+    public int Height { get; set; }
     public string ImageUrl { get; set; }
-    public double Width { get; set; }
+    public int Width { get; set; }
 }
