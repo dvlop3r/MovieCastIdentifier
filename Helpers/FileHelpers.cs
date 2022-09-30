@@ -90,6 +90,9 @@ namespace MovieCastIdentifier.Helpers
                     var metadata = await _mediaToolkitService.ExecuteAsync(metadataTask);
 
                     var i = Double.Parse(metadata.Metadata.Format.Duration) - 350;
+
+                    // Stop looking for cast after ~5 minutes
+                    var stopper = Double.Parse(metadata.Metadata.Format.Duration) - 350 - 300;
                     while(true)
                     {
                         // Start at the end of the video and go backwards capturing a frame every 5 seconds
@@ -97,6 +100,11 @@ namespace MovieCastIdentifier.Helpers
                         var task = new FfTaskSaveThumbnail(filePath, outputFile, TimeSpan.FromSeconds(i));
                         await _mediaToolkitService.ExecuteAsync(task);
                         i-=5;
+                        if(i < stopper)
+                        {
+                            await hubContext.Clients.All.ReceiveMessage("", "Couldn't find any cast in the movie.!");
+                            break;
+                        }
 
                         // Use Tesseract.Net.Sdk OCR to extract text from the frame
                         // var ocrTask = OcrApi.Create();
@@ -148,7 +156,7 @@ namespace MovieCastIdentifier.Helpers
                                 var response = await _imdbApi.GetCastMember(member);
                                 members.Add(new Member{
                                     Name = member,
-                                    ImageUrl = response.D.Where(x => x.L.ToLower().Contains(member.ToLower())).First()?.I.ImageUrl
+                                    ImageUrl = response.D.Where(x => x.L.ToLower().Contains(member.ToLower())).FirstOrDefault()?.I?.ImageUrl
                                 });
                             }
                             await hubContext.Clients.All.ReceiveImdbData("", members);
