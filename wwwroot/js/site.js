@@ -24,6 +24,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     // </snippet_ReceiveImdb>
 
+    // <snippet_ReceiveImdbData>
+    connection.on("ReceiveImdbData", (user, members) => {
+        console.log("Received message from server: " + members);
+        $("#message").text(members);
+    });
+    // </snippet_ReceiveImdbData>
+
     // document.getElementById("send").addEventListener("click", async () => {
     //     const user = document.getElementById("userInput").value;
     //     const message = document.getElementById("messageInput").value;

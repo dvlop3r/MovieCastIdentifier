@@ -141,7 +141,7 @@ namespace MovieCastIdentifier.Helpers
 
                             // Fetch memer images from IMDB
                             var members = new List<Member>();
-                            foreach(var member in castMembers)
+                            foreach(var member in realMembers)
                             {
                                 var response = await _imdbApi.GetCastMember(realMembers.First());
                                 members.Add(new Member{
