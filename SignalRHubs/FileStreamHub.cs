@@ -8,8 +8,8 @@ public class FileStreamHub : Hub<FileStreamClient>
     {
         await Clients.All.ReceiveMessage(user, message);
     }
-    public async Task CallImdb(string castMembers)
+    public async Task FetchImdbApi(string user, string message)
     {
-        await Clients.All.CallImdb(castMembers);
+        await Clients.All.FetchImdbApi(user, message);
     }
 }

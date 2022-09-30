@@ -18,8 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // </snippet_ReceiveMessage>
 
     // <snippet_ReceiveImdb>
-    connection.on("CallImdb", (user, message) => {
-        callImdb();
+    connection.on("FetchImdbApi", (user, message) => {
+        console.log("Received message from server: " + message);
+        $("#message").text(message);
     });
     // </snippet_ReceiveImdb>
 
@@ -56,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-function callImdb() {
+function callImdb(members) {
     const options = {
         method: 'GET',
         headers: {
@@ -64,8 +65,9 @@ function callImdb() {
             'X-RapidAPI-Host': 'online-movie-database.p.rapidapi.com'
         }
     };
-    
+
     console.log("Calling IMDB...............................");
+    console.log(members);
 
     fetch('https://online-movie-database.p.rapidapi.com/auto-complete?q=Matt%20damon', options)
         .then(response => response.json())
