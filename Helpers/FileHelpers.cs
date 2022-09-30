@@ -1,3 +1,4 @@
+using System.Text.Json;
 using IronOcr;
 using MediaToolkit.Services;
 using MediaToolkit.Tasks;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
+using MovieCastIdentifier.Models;
 using MovieCastIdentifier.Services;
 using MovieCastIdentifier.SignalRHubs;
 using Patagames.Ocr;
@@ -138,7 +140,16 @@ namespace MovieCastIdentifier.Helpers
 
 
                             // Fetch memer images from IMDB
-                            var response = await _imdbApi.GetCastMember(realMembers.First());
+                            var members = new List<Member>();
+                            foreach(var member in castMembers)
+                            {
+                                var response = await _imdbApi.GetCastMember(realMembers.First());
+                                members.Add(new Member{
+                                    Name = response.D.First().L,
+                                    ImageUrl = response.D.First().I.ImageUrl
+                                });
+                            }
+                            await hubContext.Clients.All.ReceiveImdbData("", JsonSerializer.Serialize(members));
 
                             // Alternatively call the JS FetchImdbApi function via SignalR to get the IMDB data
                             // await hubContext.Clients.All.FetchImdbApi("", "call IMDB api");                            
