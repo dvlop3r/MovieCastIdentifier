@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     // </snippet_ReceiveImdb>
 
+    
     // <snippet_ReceiveImdbData>
     connection.on("ReceiveImdbData", (user, members) => {
         console.log("Received message from server: " + members);
