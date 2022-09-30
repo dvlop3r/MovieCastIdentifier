@@ -1,3 +1,4 @@
+using MovieCastIdentifier;
 using MovieCastIdentifier.Services;
 using MovieCastIdentifier.SignalRHubs;
 
@@ -8,6 +9,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
 builder.Services.AddHostedService<QueuedHostedService>();
+builder.Services.AddSingleton<ImdbSettings>(x => builder.Configuration.Get<ImdbSettings>());
 
 builder.Services.AddSignalR();
 
