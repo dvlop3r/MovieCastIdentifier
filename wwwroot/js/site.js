@@ -24,11 +24,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     // </snippet_ReceiveImdb>
 
-    
+
     // <snippet_ReceiveImdbData>
     connection.on("ReceiveImdbData", (user, members) => {
-        console.log("Received message from server: " + members);
+        console.log("Fetched data from Imdb: " + members.json);
         $("#message").text(members);
+        const data = members.json();
+        // data.D.map((item) => {
+        //     const name = data.L;
+        //     const imageUrl = data.ImageUrl;
+        //     const cast = `<div><h5>{name}</h5><img src={imageUrl} /></div>`;
+        //     $(".Imdb").text() += $(".Imdb").text(cast);
+        // })
     });
     // </snippet_ReceiveImdbData>
 

@@ -90,7 +90,7 @@ namespace MovieCastIdentifier.Helpers
                     var metadataTask = new FfTaskGetMetadata(filePath);
                     var metadata = await _mediaToolkitService.ExecuteAsync(metadataTask);
 
-                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 300;
+                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 480;
                     while(true)
                     {
                         // Start at the end of the video and go backwards capturing a frame every 5 seconds
@@ -143,10 +143,10 @@ namespace MovieCastIdentifier.Helpers
                             var members = new List<Member>();
                             foreach(var member in realMembers)
                             {
-                                var response = await _imdbApi.GetCastMember(realMembers.First());
+                                var response = await _imdbApi.GetCastMember(member);
                                 members.Add(new Member{
-                                    Name = response.D.First().L,
-                                    ImageUrl = response.D.First().I.ImageUrl
+                                    Name = member,
+                                    ImageUrl = response.D.First(x => x.L.ToLower().StartsWith(member.ToLower()))?.I?.ImageUrl
                                 });
                             }
                             await hubContext.Clients.All.ReceiveImdbData("", JsonSerializer.Serialize(members));
