@@ -62,7 +62,7 @@ namespace MovieCastIdentifier.Helpers
             IHubContext<FileStreamHub,FileStreamClient> hubContext, string rootPath,
             IBackgroundTaskQueue queue, IServiceScopeFactory scopeFactory,
             IMediaToolkitService _mediaToolkitService, string untrustedFileNameForStorage,
-            string trustedFileNameForDisplay)
+            string trustedFileNameForDisplay, IImdbApi _imdbApi)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace MovieCastIdentifier.Helpers
                     var metadataTask = new FfTaskGetMetadata(filePath);
                     var metadata = await _mediaToolkitService.ExecuteAsync(metadataTask);
 
-                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 200;
+                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 300;
                     while(true)
                     {
                         // Start at the end of the video and go backwards capturing a frame every 5 seconds
@@ -136,8 +136,12 @@ namespace MovieCastIdentifier.Helpers
                             // Get real member names (not accurate)
                             var realMembers = cleanList.Skip((cleanList.Count/2)+1).Take(5).ToList();
 
-                            // Call the JS CallImdb function via SignalR to get the IMDB data
-                            await hubContext.Clients.All.FetchImdbApi("", "call IMDB api");                            
+
+                            // Fetch memer images from IMDB
+                            await _imdbApi.GetCastMember(realMembers.First());
+
+                            // Alternatively call the JS FetchImdbApi function via SignalR to get the IMDB data
+                            // await hubContext.Clients.All.FetchImdbApi("", "call IMDB api");                            
 
 
                             break;

@@ -9,7 +9,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
 builder.Services.AddHostedService<QueuedHostedService>();
-builder.Services.AddSingleton<ImdbSettings>(x => builder.Configuration.Get<ImdbSettings>());
+builder.Services.AddSingleton<ImdbSettings>(x => builder.Configuration.GetSection("ImdbSettings").Get<ImdbSettings>());
+builder.Services.AddHttpClient<IImdbApi, ImdbApi>();
 
 builder.Services.AddSignalR();
 

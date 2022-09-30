@@ -4,5 +4,5 @@ namespace MovieCastIdentifier;
 
 public interface IImdbApi
 {
-    Task<Member> GetCastMember(string name);
+    Task<ImdbResponse> GetCastMember(string name);
 }
