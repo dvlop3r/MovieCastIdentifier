@@ -138,7 +138,7 @@ namespace MovieCastIdentifier.Helpers
 
 
                             // Fetch memer images from IMDB
-                            await _imdbApi.GetCastMember(realMembers.First());
+                            var response = await _imdbApi.GetCastMember(realMembers.First());
 
                             // Alternatively call the JS FetchImdbApi function via SignalR to get the IMDB data
                             // await hubContext.Clients.All.FetchImdbApi("", "call IMDB api");                            

@@ -12,4 +12,8 @@ public class FileStreamHub : Hub<FileStreamClient>
     {
         await Clients.All.FetchImdbApi(user, message);
     }
+    public async Task SendImdbData(string user, string members)
+    {
+        await Clients.All.ReceiveImdbData(user, members);
+    }
 }
