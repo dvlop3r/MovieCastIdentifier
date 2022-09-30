@@ -35,18 +35,20 @@
     </div>
 </form>
 
+<h4 id="message"></h4>
+<br>
 <div id="Imdb">
   
 </div>
 
-<br>
-<h4 id="message"></h4>
 
 @section Scripts {
   <script>
     "use strict";
 
     async function AJAXSubmit (oFormElement) {
+        $("#Imdb").text("");
+        oFormElement.elements.namedItem("result").value = "";
         const formData = new FormData(oFormElement);
         console.log(oFormElement.action);
       try {

@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
         members.forEach(member => {
             const name = member.name;
             const imageUrl = member.imageUrl;
-            const img = `<img src="${imageUrl}" height="100" width="100" />`
+            const img = `<img src="${imageUrl}" height="200" width="200" />`
             const cast = `<div class="member"><h5>${name}</h5>${img}</div>`;
             $("#Imdb").append(cast);
         });

@@ -72,7 +72,9 @@ namespace MovieCastIdentifier.Helpers
                 {
                     // Stream file to memory
                     await section.Body.CopyToAsync(memoryStream);
-                    await hubContext.Clients.All.ReceiveMessage("", $"File \"{trustedFileNameForDisplay}\" uploaded and streamed to memory.");
+                    string message = $"File \"{trustedFileNameForDisplay}\" streamed successfully.\n"+
+                    $"Now sit back until we process the movie. This should only take a couple of minutes!";
+                    await hubContext.Clients.All.ReceiveMessage("", message);
 
                     // Save file to disk, direct reading from section body is possible but writing to
                     // and then reading from memory stream is faster and more efficient
@@ -81,16 +83,13 @@ namespace MovieCastIdentifier.Helpers
                     {
                         memoryStream.Seek(0, SeekOrigin.Begin);
                         await memoryStream.CopyToAsync(fileStream);
-                        var hubMessage = $"File \"{trustedFileNameForDisplay}\" stored on disk."+
-                        $"{Environment.NewLine}Now sit back until we process the movie. This should only take a couple of minutes!";
-                        await hubContext.Clients.All.ReceiveMessage("", hubMessage);
                     }
 
                     // Process the file with background task
                     var metadataTask = new FfTaskGetMetadata(filePath);
                     var metadata = await _mediaToolkitService.ExecuteAsync(metadataTask);
 
-                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 480;
+                    var i = Double.Parse(metadata.Metadata.Format.Duration) - 350;
                     while(true)
                     {
                         // Start at the end of the video and go backwards capturing a frame every 5 seconds
@@ -111,8 +110,11 @@ namespace MovieCastIdentifier.Helpers
 
                         // Using IronOcr, most efficient and accurate OCR package
                         var ocr = new IronTesseract();
-                        var input = new OcrInput(outputFile);
-                        var result = ocr.Read(input);
+                        OcrResult result = null;
+                        using(var input = new OcrInput(outputFile))
+                        {
+                            result = ocr.Read(input);
+                        }
 
                         if(result.Text.ToLower().Contains("cast"))
                         {
@@ -146,10 +148,11 @@ namespace MovieCastIdentifier.Helpers
                                 var response = await _imdbApi.GetCastMember(member);
                                 members.Add(new Member{
                                     Name = member,
-                                    ImageUrl = response.D.First(x => x.L.ToLower().StartsWith(member.ToLower()))?.I?.ImageUrl
+                                    ImageUrl = response.D.Where(x => x.L.ToLower().Contains(member.ToLower())).First()?.I.ImageUrl
                                 });
                             }
                             await hubContext.Clients.All.ReceiveImdbData("", members);
+                            await hubContext.Clients.All.ReceiveMessage("", "Successfully fetched cast member images from IMDB!");
 
                             // Alternatively call the JS FetchImdbApi function via SignalR to get the IMDB data
                             // await hubContext.Clients.All.FetchImdbApi("", "call IMDB api");                            

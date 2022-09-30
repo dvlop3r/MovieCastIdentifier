@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using IronOcr;
 using Microsoft.AspNetCore.Mvc;
 using MovieCastIdentifier.Filters;
 using MovieCastIdentifier.Models;
@@ -19,6 +20,12 @@ public class HomeController : Controller
     [GenerateAntiforgeryTokenCookie]
     public IActionResult Index()
     {
+        // var ocr = new IronTesseract();
+        // var input = new OcrInput("C:\\frames\\frame9433.jpeg");
+        // input.Deskew();
+        // var result = ocr.Read(input);
+        // var text = result.Text;
+
         return View();
     }
 
