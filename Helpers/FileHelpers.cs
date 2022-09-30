@@ -104,14 +104,23 @@ namespace MovieCastIdentifier.Helpers
                     }
                     else
                     {
-                        // Process the file and catch cast using a background task
-                        await _castDetectorService.ExecuteAsync(
-                            filePath,
-                            _mediaToolkitService,
-                            untrustedFileNameForStorage,
-                            trustedFileNameForDisplay,
-                            _imdbApi,
-                            hubContext);
+                        // Process the file and detect cast using a background task
+                        queue.EnqueueAsync(async (scopeFactory, cancellationToken) =>
+                        {
+                            try{
+                                await _castDetectorService.ExecuteAsync(
+                                filePath,
+                                _mediaToolkitService,
+                                untrustedFileNameForStorage,
+                                trustedFileNameForDisplay,
+                                _imdbApi,
+                                hubContext);
+                            }
+                            catch(Exception e)
+                            {
+                                await hubContext.Clients.All.ReceiveMessage("", e.Message);
+                            }
+                        });
 
                         // Convert the file to a byte array in case we need
                         var byteArray = await memoryStream.MyByteArrayAsync();

@@ -81,7 +81,7 @@ public class CastDetectorService : ICastDetectorService
                 var realMembers = cleanList.Skip((cleanList.Count/2)+1).Take(5).ToList();
 
 
-                // Fetch memer images from IMDB
+                // Fetch memer images from IMDB using realMembers, we can optionally use castMembers
                 var members = new List<Member>();
                 foreach(var member in realMembers)
                 {

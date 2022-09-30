@@ -47,6 +47,7 @@
     "use strict";
 
     async function AJAXSubmit (oFormElement) {
+        $("#message").text("");
         $("#Imdb").text("");
         oFormElement.elements.namedItem("result").value = "";
         const formData = new FormData(oFormElement);
