@@ -1,3 +1,4 @@
+using MediaToolkit.Services;
 using MovieCastIdentifier;
 using MovieCastIdentifier.Services;
 using MovieCastIdentifier.SignalRHubs;
@@ -11,6 +12,7 @@ builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
 builder.Services.AddHostedService<QueuedHostedService>();
 builder.Services.AddSingleton<ImdbSettings>(x => builder.Configuration.GetSection("ImdbSettings").Get<ImdbSettings>());
 builder.Services.AddHttpClient<IImdbApi, ImdbApi>();
+builder.Services.AddSingleton<ICastDetectorService, CastDetectorService>();
 
 builder.Services.AddSignalR();
 

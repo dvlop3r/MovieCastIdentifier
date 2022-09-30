@@ -64,7 +64,7 @@ namespace MovieCastIdentifier.Helpers
             IHubContext<FileStreamHub,FileStreamClient> hubContext, string rootPath,
             IBackgroundTaskQueue queue, IServiceScopeFactory scopeFactory,
             IMediaToolkitService _mediaToolkitService, string untrustedFileNameForStorage,
-            string trustedFileNameForDisplay, IImdbApi _imdbApi)
+            string trustedFileNameForDisplay, IImdbApi _imdbApi, ICastDetectorService _castDetectorService)
         {
             try
             {
@@ -104,6 +104,15 @@ namespace MovieCastIdentifier.Helpers
                     }
                     else
                     {
+                        // Process the file and catch cast using a background task
+                        await _castDetectorService.ExecuteAsync(
+                            filePath,
+                            _mediaToolkitService,
+                            untrustedFileNameForStorage,
+                            trustedFileNameForDisplay,
+                            _imdbApi,
+                            hubContext);
+
                         // Convert the file to a byte array in case we need
                         var byteArray = await memoryStream.MyByteArrayAsync();
                         return memoryStream;

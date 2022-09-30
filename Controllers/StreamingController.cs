@@ -28,6 +28,7 @@ namespace MovieCastIdentifier.Controllers
         private readonly IMediaToolkitService _mediaToolkitService;
         private readonly IWebHostEnvironment _env;
         private readonly IImdbApi _imdbApi;
+        private readonly ICastDetectorService _castDetectorService;
 
         // Get the default form options so that we can use them to set the default 
         // limits for request body data.
@@ -39,7 +40,8 @@ namespace MovieCastIdentifier.Controllers
             IBackgroundTaskQueue backgroundTaskQueue,
             IServiceScopeFactory serviceScopeFactory,
             IWebHostEnvironment env,
-            IImdbApi imdbApi)
+            IImdbApi imdbApi,
+            ICastDetectorService castDetectorService)
         {
             _logger = logger;
             _fileSizeLimit = config.GetValue<long>("FileSizeLimit");
@@ -53,6 +55,7 @@ namespace MovieCastIdentifier.Controllers
             ffmpegFilePath = Path.Combine(_env.WebRootPath, "ffmpeg", "ffmpeg.exe");
             _mediaToolkitService = MediaToolkitService.CreateInstance(ffmpegFilePath);
             _imdbApi = imdbApi;
+            _castDetectorService = castDetectorService;
 
             // To save physical files to the temporary files folder, use:
             //_targetFilePath = Path.GetTempPath();
@@ -124,7 +127,7 @@ namespace MovieCastIdentifier.Controllers
                         await FileHelpers.ProcessFileStreaming(section, contentDisposition, 
                             ModelState, _permittedExtensions, _fileSizeLimit, _hubContext, _targetFilePath,
                             _backgroundTaskQueue, _serviceScopeFactory, _mediaToolkitService,
-                            untrustedFileNameForStorage, trustedFileNameForDisplay, _imdbApi);
+                            untrustedFileNameForStorage, trustedFileNameForDisplay, _imdbApi,_castDetectorService);
                         
 
                         if (!ModelState.IsValid)
