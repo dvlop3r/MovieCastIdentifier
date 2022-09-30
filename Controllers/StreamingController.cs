@@ -234,7 +234,7 @@ namespace MovieCastIdentifier.Controllers
             // _context.File.Add(file);
             // await _context.SaveChangesAsync();
 
-            return Ok(nameof(StreamingController));
+            return Ok();
         }
         #endregion
 
