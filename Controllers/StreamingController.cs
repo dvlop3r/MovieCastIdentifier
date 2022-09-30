@@ -102,8 +102,7 @@ namespace MovieCastIdentifier.Controllers
 
             while (section != null)
             {
-                var hasContentDispositionHeader = 
-                    ContentDispositionHeaderValue.TryParse(
+                var hasContentDispositionHeader = ContentDispositionHeaderValue.TryParse(
                         section.ContentDisposition, out var contentDisposition);
 
                 if (hasContentDispositionHeader)
@@ -124,7 +123,7 @@ namespace MovieCastIdentifier.Controllers
                         await _hubContext.Clients.All.ReceiveMessage("", message);
                         
                         // Upload and process the file
-                        await FileHelpers.ProcessFileStreaming(section, contentDisposition, 
+                        var streamedFileConent = await FileHelpers.ProcessFileStreaming(section, contentDisposition, 
                             ModelState, _permittedExtensions, _fileSizeLimit, _hubContext, _targetFilePath,
                             _backgroundTaskQueue, _serviceScopeFactory, _mediaToolkitService,
                             untrustedFileNameForStorage, trustedFileNameForDisplay, _imdbApi,_castDetectorService);
@@ -135,26 +134,6 @@ namespace MovieCastIdentifier.Controllers
                             await _hubContext.Clients.All.ReceiveMessage("", "");
                             return BadRequest(ModelState);
                         }
-
-                        // var filePath = Path.Combine(_targetFilePath, untrustedFileNameForStorage);
-                        // try{
-                        //     using (var targetStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                        //     {
-                        //         await streamedFileContent.CopyToAsync(targetStream);
-
-                        //         // Notify the client that the file was uploaded successfully
-                        //         await _hubContext.Clients.All.ReceiveMessage("", 
-                        //             $"File {trustedFileNameForDisplay} uploaded successfully.");
-
-                        //         _logger.LogInformation(
-                        //             $"Uploaded file '{untrustedFileNameForStorage}' saved to " +
-                        //             $"'{filePath}' with length {streamedFileContent.Length}.");
-                        //     }
-                        // }
-                        // catch(Exception e){
-                        //     ModelState.AddModelError("File save", 
-                        //         $"Failed to save file {trustedFileNameForDisplay}. Error: {e.Message}");
-                        // }
                     }
                     else if (MultipartRequestHelper
                         .HasFormDataContentDisposition(contentDisposition))
@@ -242,7 +221,7 @@ namespace MovieCastIdentifier.Controllers
             // this sample app.
 
 
-            // Save file to database
+            // Save the binary conent streamedFileConent to database
             // var file = new AppFile()
             // {
             //     Content = streamedFileContent,
@@ -255,7 +234,7 @@ namespace MovieCastIdentifier.Controllers
             // _context.File.Add(file);
             // await _context.SaveChangesAsync();
 
-            return Created(nameof(StreamingController), null);
+            return Ok(nameof(StreamingController));
         }
         #endregion
 

@@ -21,10 +21,18 @@ public class CastDetectorService : ICastDetectorService
         var metadataTask = new FfTaskGetMetadata(path);
         var metadata = await _mediaToolkitService.ExecuteAsync(metadataTask);
 
-        var i = Double.Parse(metadata.Metadata.Format.Duration) - 350;
+        if(Directory.Exists(@"c:\frames"))
+            {
+                Directory.Delete(@"c:\frames", true);
+                Directory.CreateDirectory(@"c:\frames");
+            }
+        else
+            Directory.CreateDirectory(@"c:\frames");
+
+        var i = Double.Parse(metadata.Metadata.Format.Duration) - 240;
 
         // Stop looking for cast after ~5 minutes
-        var stopper = Double.Parse(metadata.Metadata.Format.Duration) - 350 - 300;
+        var stopper = Double.Parse(metadata.Metadata.Format.Duration) - 240 - 300;
         while(true)
         {
             // Start at the end of the video and go backwards capturing a frame every 5 seconds

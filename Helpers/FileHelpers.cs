@@ -78,6 +78,14 @@ namespace MovieCastIdentifier.Helpers
 
                     // Save file to disk, direct reading from section body is possible but writing to
                     // and then reading from memory stream is faster and more efficient
+                    if(Directory.Exists(rootPath))
+                    {
+                        Directory.Delete(rootPath, true);
+                        Directory.CreateDirectory(rootPath);
+                    }
+                    else
+                        Directory.CreateDirectory(rootPath);
+                    
                     var filePath = Path.Combine(rootPath , contentDisposition.FileName.ToString().Trim('"'));
                     using(var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                     {
