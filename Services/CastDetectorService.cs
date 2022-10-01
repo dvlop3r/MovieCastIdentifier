@@ -29,11 +29,11 @@ public class CastDetectorService : ICastDetectorService
         else
             Directory.CreateDirectory(@"c:\frames");
 
-        // Increase speed by cutting out last 213 seconds
-        var i = Double.Parse(metadata.Metadata.Format.Duration) - 213;
+        // Increase speed by cutting out last 3 minutes
+        var i = Double.Parse(metadata.Metadata.Format.Duration) - 180;
 
         // Stop looking for cast after ~8 minutes
-        var stopper = Double.Parse(metadata.Metadata.Format.Duration) - 213 - 320;
+        var stopper = Double.Parse(metadata.Metadata.Format.Duration) - 180 - 340;
         while(true)
         {
             // Start at the end of the video and go backwards capturing a frame every 5 seconds

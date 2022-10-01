@@ -73,7 +73,7 @@ namespace MovieCastIdentifier.Helpers
                     // Stream file to memory
                     await section.Body.CopyToAsync(memoryStream);
                     string message = $"File \"{trustedFileNameForDisplay}\" streamed successfully.\n"+
-                    $"Now sit back until we process the movie. This should only take a couple of minutes!";
+                    $"Now sit back until we process the movie. This should only take 1 to 5 minutes.";
                     await hubContext.Clients.All.ReceiveMessage("", message);
 
                     // Save file to disk, direct reading from section body is possible but writing to
