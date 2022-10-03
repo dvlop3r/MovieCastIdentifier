@@ -33,7 +33,7 @@ public class CastDetectorService : ICastDetectorService
         var i = Double.Parse(metadata.Metadata.Format.Duration) - 180;
 
         // Stop looking for cast after ~8 minutes
-        var stopper = Double.Parse(metadata.Metadata.Format.Duration) - 180 - 340;
+        var stopper = Double.Parse(metadata.Metadata.Format.Duration) - 180 - 360;
         while(true)
         {
             // Start at the end of the video and go backwards capturing a frame every 5 seconds
